@@ -1,0 +1,45 @@
+version: '3'
+services:
+  # Setup Postgres
+  postgres:
+    # Use 10.1, alpine version is smaller
+    image: postgres:10.1-alpine
+    # Don't load up older data, start fresh
+    volumes:
+      - ./pgdata:/pgdata
+    # Export this on the usual port
+    ports:
+      - "5432:5432"
+    # These define the db name, user and password
+    environment:
+      - POSTGRES_USER=tanker
+      - POSTGRES_PASSWORD=tanker
+      - PGDATA=/pgdata
+  # Setup Redis
+  redis:
+    # Again use an alpine version
+    image: redis:4.0.6-alpine
+    # And open up the usual port
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redisdata:/var/lib/redis
+  # Setup Rabbitmq
+  rabbitmq:
+    image: "rabbitmq:3.7.2-alpine"
+    hostname: "rabbitmq"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq"
+    volumes:
+      - ./rabbitmq:/data/mnesia
+      #- "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
+      #- "./rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro"
+      #- "./autocluster-0.4.1.ez:/usr/lib/rabbitmq/lib/rabbitmq_server-3.5.5/plugins/autocluster-0.4.1.ez"
