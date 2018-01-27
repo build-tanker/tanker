@@ -12,7 +12,7 @@ import (
 	"github.com/sudhanshuraheja/tanker/pkg/logger"
 )
 
-const migrationsPath = "file://./db/migrations"
+const migrationsPath = "file://./pkg/postgres/migrations"
 
 // RunDatabaseMigrations : run each migration on the db
 func RunDatabaseMigrations() error {
