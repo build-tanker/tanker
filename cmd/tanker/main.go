@@ -31,8 +31,7 @@ func Init() *cli.App {
 			Name:  "start",
 			Usage: "start the service",
 			Action: func(c *cli.Context) error {
-				server.StartAPIServer()
-				return nil
+				return server.StartAPIServer()
 			},
 		},
 		{
