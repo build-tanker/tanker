@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Config object
 type Config struct {
 	name                   string
 	version                string
@@ -19,10 +18,9 @@ type Config struct {
 	database               DatabaseConfig
 }
 
-var config *Config
+func NewConfig() *Config {
+	config := &Config{}
 
-// Init config from file
-func Init() {
 	viper.AutomaticEnv()
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("..")
@@ -43,62 +41,53 @@ func Init() {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Printf("Config file %s was edited, reloading config\n", e.Name)
-		readLatestConfig()
+		config.readLatestConfig()
 	})
 
-	readLatestConfig()
+	config.readLatestConfig()
+
+	return config
 }
 
-func readLatestConfig() {
-	config = &Config{
-		name:     viper.GetString("application.name"),
-		version:  viper.GetString("application.version"),
-		logLevel: viper.GetString("application.logLevel"),
-		port:     viper.GetString("server.port"),
-		enableStaticFileServer: viper.GetBool("server.enableStaticFileServer"),
-		enableGzipCompression:  viper.GetBool("server.enableGzipCompression"),
-		enableDelayMiddleware:  viper.GetBool("server.enableDelayMiddleware"),
-		database:               newDatabaseConfig(),
-	}
-
+func (c *Config) Name() string {
+	return c.name
 }
 
-// Name : Exporting Name
-func Name() string {
-	return config.name
+func (c *Config) Version() string {
+	return c.version
 }
 
-// Version : Export application version
-func Version() string {
-	return config.version
+func (c *Config) LogLevel() string {
+	return c.logLevel
 }
 
-// LogLevel : Export the log level
-func LogLevel() string {
-	return config.logLevel
+func (c *Config) Port() string {
+	return c.port
 }
 
-// Port : Export the port
-func Port() string {
-	return config.port
+func (c *Config) EnableStaticFileServer() bool {
+	return c.enableStaticFileServer
 }
 
-// EnableStaticFileServer : Export if we are enabling the static file server
-func EnableStaticFileServer() bool {
-	return config.enableStaticFileServer
+func (c *Config) EnableGzipCompression() bool {
+	return c.enableGzipCompression
 }
 
-// EnableGzipCompression : Export if we want to enable Gzip compression
-func EnableGzipCompression() bool {
-	return config.enableGzipCompression
+func (c *Config) EnableDelayMiddleware() bool {
+	return c.enableDelayMiddleware
 }
 
-// EnableDelayMiddleware : Export if we want to enable delay middleware
-func EnableDelayMiddleware() bool {
-	return config.enableDelayMiddleware
+func (c *Config) Database() DatabaseConfig {
+	return c.database
 }
 
-// Database : export the database configuration
-func Database() DatabaseConfig {
-	return config.database
+func (c *Config) readLatestConfig() {
+	c.name = viper.GetString("application.name")
+	c.version = viper.GetString("application.version")
+	c.logLevel = viper.GetString("application.logLevel")
+	c.port = viper.GetString("server.port")
+	c.enableStaticFileServer = viper.GetBool("server.enableStaticFileServer")
+	c.enableGzipCompression = viper.GetBool("server.enableGzipCompression")
+	c.enableDelayMiddleware = viper.GetBool("server.enableDelayMiddleware")
+	c.database = NewDatabaseConfig()
 }

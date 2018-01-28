@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// DatabaseConfig : configuration for the db
 type DatabaseConfig struct {
 	name        string
 	host        string
@@ -16,7 +15,7 @@ type DatabaseConfig struct {
 	maxPoolSize int
 }
 
-func newDatabaseConfig() DatabaseConfig {
+func NewDatabaseConfig() DatabaseConfig {
 	return DatabaseConfig{
 		name:        viper.GetString("database.name"),
 		host:        viper.GetString("database.host"),
@@ -27,7 +26,6 @@ func newDatabaseConfig() DatabaseConfig {
 	}
 }
 
-// ConnectionString : string to connect to the db
 func (db DatabaseConfig) ConnectionString() string {
 	return fmt.Sprintf("dbname=%s user=%s password='%s' host=%s port=%d sslmode=disable",
 		db.name,
@@ -38,7 +36,6 @@ func (db DatabaseConfig) ConnectionString() string {
 	)
 }
 
-// ConnectionURL : url to connect to db
 func (db DatabaseConfig) ConnectionURL() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
 		db.user,
@@ -49,7 +46,6 @@ func (db DatabaseConfig) ConnectionURL() string {
 	)
 }
 
-// MaxPoolSize : export the maximum connection pool size
 func (db DatabaseConfig) MaxPoolSize() int {
 	return db.maxPoolSize
 }

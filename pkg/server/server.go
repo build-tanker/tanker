@@ -4,21 +4,35 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/jmoiron/sqlx"
+
 	"github.com/jeffbmartinez/delay"
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urfave/negroni"
 
-	"github.com/sudhanshuraheja/tanker/pkg/config"
-	"github.com/sudhanshuraheja/tanker/pkg/logger"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
-// StartAPIServer : setup routes and start the server
-func StartAPIServer() error {
-	server := negroni.New()
-	router := Router()
+type Server struct {
+	ctx *appcontext.AppContext
+	db  *sqlx.DB
+}
 
+func NewServer(ctx *appcontext.AppContext, db *sqlx.DB) *Server {
+	return &Server{
+		ctx: ctx,
+		db:  db,
+	}
+}
+
+func (s *Server) Start() error {
+	config := s.ctx.GetConfig()
+	logger := s.ctx.GetLogger()
+
+	server := negroni.New()
 	server.Use(negroni.NewRecovery())
-	server.Use(negroni.NewLogger())
+
+	router := Router(s.ctx)
 
 	if config.EnableDelayMiddleware() {
 		server.Use(delay.Middleware{})
@@ -32,20 +46,26 @@ func StartAPIServer() error {
 		server.Use(negroni.NewStatic(http.Dir("data")))
 	}
 
+	serverURL := fmt.Sprintf(":%s", config.Port())
+
 	server.Use(Recover())
 	server.UseHandler(router)
+	logger.Infoln("Starting the server at", serverURL)
+	server.Run(serverURL)
 
-	serverURL := fmt.Sprintf(":%s", config.Port())
-	logger.Infoln("The server is now running at", serverURL)
-	return http.ListenAndServe(serverURL, server)
+	return nil
 }
 
-// Recover : middleware for recovering after panic
+func (s *Server) Stop() error {
+	// Not sure how to stop a server
+	return nil
+}
+
 func Recover() negroni.HandlerFunc {
 	return negroni.HandlerFunc(func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		defer func() {
 			if err := recover(); err != nil {
-				logger.Errorrf(r, "Recovered from panic: %+v", err)
+				fmt.Printf("Recovered from panic: %+v", err)
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}

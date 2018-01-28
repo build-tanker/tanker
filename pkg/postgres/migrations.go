@@ -8,15 +8,13 @@ import (
 
 	"database/sql"
 
-	"github.com/sudhanshuraheja/tanker/pkg/config"
-	"github.com/sudhanshuraheja/tanker/pkg/logger"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
 const migrationsPath = "file://./pkg/postgres/migrations"
 
-// RunDatabaseMigrations : run each migration on the db
-func RunDatabaseMigrations() error {
-	db, err := sql.Open("postgres", config.Database().ConnectionURL())
+func RunDatabaseMigrations(ctx *appcontext.AppContext) error {
+	db, err := sql.Open("postgres", ctx.GetConfig().Database().ConnectionURL())
 
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	m, err := migrate.NewWithDatabaseInstance(migrationsPath, "postgres", driver)
@@ -26,7 +24,7 @@ func RunDatabaseMigrations() error {
 
 	err = m.Up()
 	if err == migrate.ErrNoChange {
-		logger.Info("Sadly, found no new migrations to run")
+		ctx.GetLogger().Info("Sadly, found no new migrations to run")
 		return nil
 	}
 
@@ -34,22 +32,21 @@ func RunDatabaseMigrations() error {
 		return err
 	}
 
-	logger.Info("Migration has been successfully done")
+	ctx.GetLogger().Info("Migration has been successfully done")
 	return nil
 }
 
-// RollbackDatabaseMigration : rollback the latest migration
-func RollbackDatabaseMigration() error {
-	m, err := migrate.New(migrationsPath, config.Database().ConnectionURL())
+func RollbackDatabaseMigration(ctx *appcontext.AppContext) error {
+	m, err := migrate.New(migrationsPath, ctx.GetConfig().Database().ConnectionURL())
 	if err != nil {
 		return err
 	}
 
 	if err := m.Steps(-1); err != nil {
-		logger.Info("We have already removed all migrations")
+		ctx.GetLogger().Info("We have already removed all migrations")
 		return nil
 	}
 
-	logger.Info("Rollback Successful")
+	ctx.GetLogger().Info("Rollback Successful")
 	return nil
 }

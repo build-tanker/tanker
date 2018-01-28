@@ -12,15 +12,14 @@ import (
 )
 
 func main() {
-	config.Init()
-	logger.Init()
+	config := config.NewConfig()
+	logger := logger.NewLogger(config)
+	ctx := appcontext.NewAppContext(config, logger)
+	db := postgres.NewPostgres(*logger, config.Database().ConnectionURL(), config.Database().MaxPoolSize())
+	server := server.NewServer(ctx, db)
 
-	logger.Infoln("Tanker is running")
-	Init()
-}
+	logger.Infoln("Starting sample-cli")
 
-// Init : start the cli wrapper
-func Init() *cli.App {
 	app := cli.NewApp()
 	app.Name = config.Name()
 	app.Version = config.Version()
@@ -54,5 +53,3 @@ func Init() *cli.App {
 		panic(err)
 	}
 
-	return app
-}
