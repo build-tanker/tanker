@@ -22,8 +22,8 @@ type Shipper struct {
 type ShipperDatastore interface {
 	Add(name string, machineName string) (int64, string, error)
 	Delete(id int64) error
-	// View(id int64) ([]Shipper, error)
-	// ViewAll() ([]Shipper, error)
+	View(id int64) (Shipper, error)
+	ViewAll() ([]Shipper, error)
 }
 
 type shipperDatastore struct {
@@ -69,4 +69,39 @@ func (s *shipperDatastore) Delete(id int64) error {
 		return err
 	}
 	return nil
+}
+
+func (s *shipperDatastore) View(id int64) (Shipper, error) {
+	rows, err := s.db.Queryx("SELECT * FROM shippers WHERE id=$1", id)
+	if err != nil {
+		return Shipper{}, err
+	}
+
+	var shipper Shipper
+	for rows.Next() {
+		err = rows.StructScan(&shipper)
+		if err != nil {
+			return Shipper{}, err
+		}
+	}
+	return shipper, nil
+}
+
+func (s *shipperDatastore) ViewAll() ([]Shipper, error) {
+	shippers := []Shipper{}
+
+	rows, err := s.db.Queryx("SELECT * FROM shippers LIMIT 0, 100")
+	if err != nil {
+		return shippers, err
+	}
+
+	for rows.Next() {
+		var shipper Shipper
+		err = rows.StructScan(&shipper)
+		if err != nil {
+			return shippers, err
+		}
+		shippers = append(shippers, shipper)
+	}
+	return shippers, nil
 }
