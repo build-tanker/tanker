@@ -10,7 +10,7 @@ import (
 
 const connMaxLifetime = 30 * time.Minute
 
-func NewPostgres(logger logger.Logger, url string, maxOpenConns int) *sqlx.DB {
+func NewPostgres(logger *logger.Logger, url string, maxOpenConns int) *sqlx.DB {
 	db, err := sqlx.Open("postgres", url)
 	if err != nil {
 		logger.Fatalf("Could not connect to database: %s", err)

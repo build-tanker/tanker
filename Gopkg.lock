@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/DATA-DOG/go-sqlmock"
+  packages = ["."]
+  revision = "d76b18b42f285b792bf985118980ce9eacea9d10"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -108,6 +114,12 @@
   version = "v1.0.0"
 
 [[projects]]
+  name = "github.com/satori/go.uuid"
+  packages = ["."]
+  revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
+  version = "v1.2.0"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
@@ -201,6 +213,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1a157fee70ed17ca20c26650150c6a41b5b8e6436b9c575385f3515d10d63d39"
+  inputs-digest = "48876e3c6a57787e60c3c18a59b2bdf4861fde86c19a5ee956871e1c1dcd5cd0"
   solver-name = "gps-cdcl"
   solver-version = 1
