@@ -5,6 +5,7 @@ import (
 
 	"github.com/urfave/cli"
 
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 	"github.com/sudhanshuraheja/tanker/pkg/config"
 	"github.com/sudhanshuraheja/tanker/pkg/logger"
 	"github.com/sudhanshuraheja/tanker/pkg/postgres"
@@ -30,21 +31,21 @@ func main() {
 			Name:  "start",
 			Usage: "start the service",
 			Action: func(c *cli.Context) error {
-				return server.StartAPIServer()
+				return server.Start()
 			},
 		},
 		{
 			Name:  "migrate",
 			Usage: "run database migrations",
 			Action: func(c *cli.Context) error {
-				return postgres.RunDatabaseMigrations()
+				return postgres.RunDatabaseMigrations(ctx)
 			},
 		},
 		{
 			Name:  "rollback",
 			Usage: "rollback the latest database migration",
 			Action: func(c *cli.Context) error {
-				return postgres.RollbackDatabaseMigration()
+				return postgres.RollbackDatabaseMigration(ctx)
 			},
 		},
 	}
@@ -53,3 +54,4 @@ func main() {
 		panic(err)
 	}
 
+}
