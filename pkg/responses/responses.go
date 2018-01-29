@@ -22,6 +22,18 @@ type ErrorResponse struct {
 	Message string `json:"message,omitempty"`
 }
 
+func NewErrorResponse(code string, message string) *Response {
+	return &Response{
+		Success: "false",
+		Errors: []ErrorResponse{
+			ErrorResponse{
+				Code:    code,
+				Message: message,
+			},
+		},
+	}
+}
+
 type Shipper struct {
 	ID          int64  `json:"id,omitempty"`
 	AccessKey   string `json:"access_key,omitempty"`
@@ -37,5 +49,6 @@ func NewShipperAddSuccessResponse(id int64, accessKey string) *Response {
 			ID:        id,
 			AccessKey: accessKey,
 		},
+		Success: "true",
 	}
 }

@@ -28,20 +28,9 @@ func (s *ShipperHandler) Add(ctx *appcontext.AppContext) HTTPHandler {
 
 		id, accessKey, err := s.service.Add(name, machineName)
 		if err != nil {
-			responses.WriteJSON(
-				w, http.StatusBadRequest,
-				responses.Response{
-					Success: "false",
-					Errors: []responses.ErrorResponse{
-						responses.ErrorResponse{Code: "shipper:add:error", Message: err.Error()},
-					},
-				},
-			)
+			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:add:error", err.Error()))
 			return
 		}
-
-		ctx.GetLogger().Infoln(id)
-		ctx.GetLogger().Infoln(accessKey)
 		responses.WriteJSON(w, http.StatusOK, responses.NewShipperAddSuccessResponse(id, accessKey))
 	}
 }
