@@ -32,7 +32,7 @@ func (s *Server) Start() error {
 	server := negroni.New()
 	server.Use(negroni.NewRecovery())
 
-	router := Router(s.ctx)
+	router := Router(s.ctx, s.db)
 
 	if config.EnableDelayMiddleware() {
 		server.Use(delay.Middleware{})
