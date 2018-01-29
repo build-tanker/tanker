@@ -1,11 +1,18 @@
 package pings
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/responses"
+)
+
+type HTTPHandler func(w http.ResponseWriter, r *http.Request)
 
 type PingHandler struct{}
 
-func (p *PingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("{\"success\":\"pong\"}"))
+func (p *PingHandler) Ping(ctx *appcontext.AppContext) HTTPHandler {
+	return func(w http.ResponseWriter, r *http.Request) {
+		responses.WriteJSON(w, http.StatusOK, responses.Response{Success: "pong"})
+	}
 }

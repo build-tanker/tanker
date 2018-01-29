@@ -15,16 +15,19 @@ type HTTPHandler func(w http.ResponseWriter, r *http.Request)
 
 func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 
+	pingService := pings.PingHandler{}
+
 	shipperService := shippers.ShipperHandler{}
+	shipperService.Init(ctx, db)
 
 	router := mux.NewRouter()
 	// GET___ .../ping
-	router.Handle("/ping", &pings.PingHandler{})
+	router.HandleFunc("/ping", pingService.Ping(ctx))
 
 	// Shippers
 	// POST__ .../v1/shippers?name=shipper_name&machineName=machine_name
-	router.HandleFunc("/v1/shippers", shipperService.Add(ctx, db)).Methods("POST")
-	// GET___ .../v1/shippers?page=1&count=10
+	router.HandleFunc("/v1/shippers", shipperService.Add(ctx)).Methods("POST")
+	// GET___ .../v1/shippers?page=1&count=25
 	router.HandleFunc("/v1/shippers", FakeHandler(ctx, db)).Methods("GET")
 	// GET___ .../v1/shippers/id
 	router.HandleFunc("/v1/shippers/{id}", FakeHandler(ctx, db)).Methods("GET")
