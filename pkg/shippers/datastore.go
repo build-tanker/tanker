@@ -8,22 +8,14 @@ import (
 
 	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 	"github.com/sudhanshuraheja/tanker/pkg/logger"
+	"github.com/sudhanshuraheja/tanker/pkg/model"
 )
-
-type Shipper struct {
-	ID          int64  `db:"id" json:"id"`
-	AccessKey   string `db:"access_key" json:"access_key"`
-	Name        string `db:"name" json:"name"`
-	MachineName string `db:"machine_name" json:"machine_name"`
-	CreatedAt   int    `db:"created_at" json:"created_at"`
-	UpdatedAt   int    `db:"updated_at" json:"updated_at"`
-}
 
 type ShipperDatastore interface {
 	Add(name string, machineName string) (int64, string, error)
 	Delete(id int64) error
-	View(id int64) (Shipper, error)
-	ViewAll() ([]Shipper, error)
+	View(id int64) (model.Shipper, error)
+	ViewAll() ([]model.Shipper, error)
 }
 
 type shipperDatastore struct {
@@ -48,7 +40,7 @@ func (s *shipperDatastore) Add(name, machineName string) (int64, string, error) 
 	}
 
 	for rows.Next() {
-		var sh Shipper
+		var sh model.Shipper
 		err = rows.StructScan(&sh)
 		if err != nil {
 			return 0, "", err
@@ -71,32 +63,32 @@ func (s *shipperDatastore) Delete(id int64) error {
 	return nil
 }
 
-func (s *shipperDatastore) View(id int64) (Shipper, error) {
+func (s *shipperDatastore) View(id int64) (model.Shipper, error) {
 	rows, err := s.db.Queryx("SELECT * FROM shippers WHERE id=$1", id)
 	if err != nil {
-		return Shipper{}, err
+		return model.Shipper{}, err
 	}
 
-	var shipper Shipper
+	var shipper model.Shipper
 	for rows.Next() {
 		err = rows.StructScan(&shipper)
 		if err != nil {
-			return Shipper{}, err
+			return model.Shipper{}, err
 		}
 	}
 	return shipper, nil
 }
 
-func (s *shipperDatastore) ViewAll() ([]Shipper, error) {
-	shippers := []Shipper{}
+func (s *shipperDatastore) ViewAll() ([]model.Shipper, error) {
+	shippers := []model.Shipper{}
 
-	rows, err := s.db.Queryx("SELECT * FROM shippers LIMIT 0, 100")
+	rows, err := s.db.Queryx("SELECT * FROM shippers LIMIT 100 OFFSET 0")
 	if err != nil {
 		return shippers, err
 	}
 
 	for rows.Next() {
-		var shipper Shipper
+		var shipper model.Shipper
 		err = rows.StructScan(&shipper)
 		if err != nil {
 			return shippers, err
