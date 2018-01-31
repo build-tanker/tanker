@@ -32,7 +32,14 @@ func (s *ShipperHandler) Add(ctx *appcontext.AppContext) HTTPHandler {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:add:error", err.Error()))
 			return
 		}
-		responses.WriteJSON(w, http.StatusOK, responses.NewShipperAddSuccessResponse(id, accessKey))
+
+		responses.WriteJSON(w, http.StatusOK, &responses.Response{
+			Data: &Shipper{
+				ID:        id,
+				AccessKey: accessKey,
+			},
+			Success: "true",
+		})
 	}
 }
 
@@ -60,7 +67,10 @@ func (s *ShipperHandler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:viewall:error", err.Error()))
 			return
 		}
-		responses.WriteJSON(w, http.StatusOK, responses.NewShipperViewAllSuccessResponse(shippers))
+		responses.WriteJSON(w, http.StatusOK, &responses.Response{
+			Data:    shippers,
+			Success: "true",
+		})
 	}
 }
 
@@ -79,7 +89,10 @@ func (s *ShipperHandler) View(ctx *appcontext.AppContext) HTTPHandler {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:view:error", err.Error()))
 			return
 		}
-		responses.WriteJSON(w, http.StatusOK, responses.NewShipperViewSuccessResponse(shippers))
+		responses.WriteJSON(w, http.StatusOK, &responses.Response{
+			Data:    shippers,
+			Success: "true",
+		})
 	}
 }
 
@@ -98,6 +111,8 @@ func (s *ShipperHandler) Delete(ctx *appcontext.AppContext) HTTPHandler {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:delete:error", err.Error()))
 			return
 		}
-		responses.WriteJSON(w, http.StatusOK, responses.NewShipperDeleteSuccessResponse())
+		responses.WriteJSON(w, http.StatusOK, &responses.Response{
+			Success: "true",
+		})
 	}
 }

@@ -3,8 +3,6 @@ package responses
 import (
 	"encoding/json"
 	"net/http"
-
-	"github.com/sudhanshuraheja/tanker/pkg/model"
 )
 
 func WriteJSON(w http.ResponseWriter, status int, i interface{}) {
@@ -33,35 +31,5 @@ func NewErrorResponse(code string, message string) *Response {
 				Message: message,
 			},
 		},
-	}
-}
-
-func NewShipperAddSuccessResponse(id int64, accessKey string) *Response {
-	return &Response{
-		Data: &model.Shipper{
-			ID:        id,
-			AccessKey: accessKey,
-		},
-		Success: "true",
-	}
-}
-
-func NewShipperViewAllSuccessResponse(shippers []model.Shipper) *Response {
-	return &Response{
-		Data:    shippers,
-		Success: "true",
-	}
-}
-
-func NewShipperViewSuccessResponse(shipper model.Shipper) *Response {
-	return &Response{
-		Data:    shipper,
-		Success: "true",
-	}
-}
-
-func NewShipperDeleteSuccessResponse() *Response {
-	return &Response{
-		Success: "true",
 	}
 }
