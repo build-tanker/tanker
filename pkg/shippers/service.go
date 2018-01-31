@@ -5,35 +5,35 @@ import (
 	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
-type ShippersService interface {
+type Service interface {
 	Add(name string, machineName string) (int64, string, error)
 	Delete(id int64) error
 	View(id int64) (Shipper, error)
 	ViewAll() ([]Shipper, error)
 }
 
-type shippersService struct {
+type service struct {
 	ctx       *appcontext.AppContext
-	datastore ShipperDatastore
+	datastore Datastore
 }
 
-func NewShippersService(ctx *appcontext.AppContext, db *sqlx.DB) ShippersService {
-	datastore := NewShipperDatastore(ctx, db)
-	return &shippersService{ctx, datastore}
+func NewService(ctx *appcontext.AppContext, db *sqlx.DB) Service {
+	datastore := NewDatastore(ctx, db)
+	return &service{ctx, datastore}
 }
 
-func (s *shippersService) Add(name, machineName string) (int64, string, error) {
+func (s *service) Add(name, machineName string) (int64, string, error) {
 	return s.datastore.Add(name, machineName)
 }
 
-func (s *shippersService) Delete(id int64) error {
+func (s *service) Delete(id int64) error {
 	return s.datastore.Delete(id)
 }
 
-func (s *shippersService) View(id int64) (Shipper, error) {
+func (s *service) View(id int64) (Shipper, error) {
 	return s.datastore.View(id)
 }
 
-func (s *shippersService) ViewAll() ([]Shipper, error) {
+func (s *service) ViewAll() ([]Shipper, error) {
 	return s.datastore.ViewAll()
 }

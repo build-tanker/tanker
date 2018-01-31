@@ -17,7 +17,7 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 
 	pingHandler := pings.PingHandler{}
 
-	shipperHandler := shippers.NewShipperHandler(ctx, db)
+	shipperHandler := shippers.NewHandler(ctx, db)
 
 	router := mux.NewRouter()
 	// GET___ .../ping

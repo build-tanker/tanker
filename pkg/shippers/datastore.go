@@ -20,28 +20,28 @@ type Shipper struct {
 	UpdatedAt   time.Time `db:"updated_at" json:"updated_at,omitempty"`
 }
 
-type ShipperDatastore interface {
+type Datastore interface {
 	Add(name string, machineName string) (int64, string, error)
 	Delete(id int64) error
 	View(id int64) (Shipper, error)
 	ViewAll() ([]Shipper, error)
 }
 
-type shipperDatastore struct {
+type datastore struct {
 	ctx *appcontext.AppContext
 	db  *sqlx.DB
 	log *logger.Logger
 }
 
-func NewShipperDatastore(ctx *appcontext.AppContext, db *sqlx.DB) ShipperDatastore {
-	return &shipperDatastore{
+func NewDatastore(ctx *appcontext.AppContext, db *sqlx.DB) Datastore {
+	return &datastore{
 		ctx: ctx,
 		db:  db,
 		log: ctx.GetLogger(),
 	}
 }
 
-func (s *shipperDatastore) Add(name, machineName string) (int64, string, error) {
+func (s *datastore) Add(name, machineName string) (int64, string, error) {
 	newUUID := s.generateUUID()
 	rows, err := s.db.Queryx("INSERT INTO shippers (access_key, name, machine_name) VALUES ($1, $2, $3) RETURNING id", newUUID, name, machineName)
 	if err != nil {
@@ -60,11 +60,11 @@ func (s *shipperDatastore) Add(name, machineName string) (int64, string, error) 
 	return 0, "", errors.New("No error in inserting, still could not find a ID")
 }
 
-func (s *shipperDatastore) generateUUID() string {
+func (s *datastore) generateUUID() string {
 	return uuid.NewV4().String()
 }
 
-func (s *shipperDatastore) Delete(id int64) error {
+func (s *datastore) Delete(id int64) error {
 	_, err := s.db.Exec("DELETE FROM shippers WHERE id=$1", id)
 	if err != nil {
 		return err
@@ -72,7 +72,7 @@ func (s *shipperDatastore) Delete(id int64) error {
 	return nil
 }
 
-func (s *shipperDatastore) View(id int64) (Shipper, error) {
+func (s *datastore) View(id int64) (Shipper, error) {
 	rows, err := s.db.Queryx("SELECT * FROM shippers WHERE id=$1", id)
 	if err != nil {
 		return Shipper{}, err
@@ -88,7 +88,7 @@ func (s *shipperDatastore) View(id int64) (Shipper, error) {
 	return shipper, nil
 }
 
-func (s *shipperDatastore) ViewAll() ([]Shipper, error) {
+func (s *datastore) ViewAll() ([]Shipper, error) {
 	shippers := []Shipper{}
 
 	rows, err := s.db.Queryx("SELECT * FROM shippers LIMIT 100 OFFSET 0")

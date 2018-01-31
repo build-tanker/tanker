@@ -14,24 +14,24 @@ import (
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)
 
-type ShipperHandler interface {
+type Handler interface {
 	Add(*appcontext.AppContext) HTTPHandler
 	ViewAll(ctx *appcontext.AppContext) HTTPHandler
 	View(ctx *appcontext.AppContext) HTTPHandler
 	Delete(ctx *appcontext.AppContext) HTTPHandler
 }
 
-type shipperHandler struct {
-	service ShippersService
+type handler struct {
+	service Service
 }
 
-func NewShipperHandler(ctx *appcontext.AppContext, db *sqlx.DB) ShipperHandler {
-	return &shipperHandler{
-		service: NewShippersService(ctx, db),
+func NewHandler(ctx *appcontext.AppContext, db *sqlx.DB) Handler {
+	return &handler{
+		service: NewService(ctx, db),
 	}
 }
 
-func (s *shipperHandler) Add(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) Add(ctx *appcontext.AppContext) HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		name := s.parseKeyFromQuery(r, "name")
 		machineName := s.parseKeyFromQuery(r, "machineName")
@@ -52,7 +52,7 @@ func (s *shipperHandler) Add(ctx *appcontext.AppContext) HTTPHandler {
 	}
 }
 
-func (s *shipperHandler) parseKeyFromQuery(r *http.Request, key string) string {
+func (s *handler) parseKeyFromQuery(r *http.Request, key string) string {
 	value := ""
 	if len(r.URL.Query()[key]) > 0 {
 		value = r.URL.Query()[key][0]
@@ -60,13 +60,13 @@ func (s *shipperHandler) parseKeyFromQuery(r *http.Request, key string) string {
 	return value
 }
 
-func (s *shipperHandler) parseKeyFromVars(r *http.Request, key string) string {
+func (s *handler) parseKeyFromVars(r *http.Request, key string) string {
 	vars := mux.Vars(r)
 	return vars[key]
 }
 
 // /v1/shippers?page=1&count=25
-func (s *shipperHandler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// page := s.parseKeyFromQuery(r, "page")
 		// count := s.parseKeyFromQuery(r, "count")
@@ -84,7 +84,7 @@ func (s *shipperHandler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
 }
 
 // /v1/shippers/id
-func (s *shipperHandler) View(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) View(ctx *appcontext.AppContext) HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idString := s.parseKeyFromVars(r, "id")
 		id, err := strconv.Atoi(idString)
@@ -106,7 +106,7 @@ func (s *shipperHandler) View(ctx *appcontext.AppContext) HTTPHandler {
 }
 
 // /v1/shippers/id
-func (s *shipperHandler) Delete(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) Delete(ctx *appcontext.AppContext) HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idString := s.parseKeyFromVars(r, "id")
 		id, err := strconv.Atoi(idString)
