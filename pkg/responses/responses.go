@@ -52,3 +52,10 @@ func NewShipperViewAllSuccessResponse(shippers []model.Shipper) *Response {
 		Success: "true",
 	}
 }
+
+func NewShipperViewSuccessResponse(shipper model.Shipper) *Response {
+	return &Response{
+		Data:    shipper,
+		Success: "true",
+	}
+}

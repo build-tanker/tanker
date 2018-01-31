@@ -30,7 +30,7 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 	// GET___ .../v1/shippers?page=1&count=25
 	router.HandleFunc("/v1/shippers", shipperHandler.ViewAll(ctx)).Methods(http.MethodGet)
 	// GET___ .../v1/shippers/id
-	router.HandleFunc("/v1/shippers/{id}", FakeHandler(ctx, db)).Methods(http.MethodGet)
+	router.HandleFunc("/v1/shippers/{id}", shipperHandler.View(ctx)).Methods(http.MethodGet)
 	// PUT___ .../v1/shippers/id?name=shipper_name&machineName=machine_name
 	router.HandleFunc("/v1/shippers/{id}", FakeHandler(ctx, db)).Methods(http.MethodPut)
 	// DELETE .../v1/shippers/id

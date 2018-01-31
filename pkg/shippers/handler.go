@@ -1,8 +1,11 @@
 package shippers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/sudhanshuraheja/tanker/pkg/responses"
 
 	"github.com/jmoiron/sqlx"
@@ -41,6 +44,12 @@ func (s *ShipperHandler) parseKeyFromQuery(r *http.Request, key string) string {
 	return value
 }
 
+func (s *ShipperHandler) parseKeyFromVars(r *http.Request, key string) string {
+	vars := mux.Vars(r)
+	fmt.Println(vars)
+	return vars[key]
+}
+
 // /v1/shippers?page=1&count=25
 func (s *ShipperHandler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -53,5 +62,23 @@ func (s *ShipperHandler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
 			return
 		}
 		responses.WriteJSON(w, http.StatusOK, responses.NewShipperViewAllSuccessResponse(shippers))
+	}
+}
+
+// /v1/shippers/id
+func (s *ShipperHandler) View(ctx *appcontext.AppContext) HTTPHandler {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idString := s.parseKeyFromVars(r, "id")
+		id, err := strconv.Atoi(idString)
+		if err != nil {
+			ctx.GetLogger().Infoln("Could not find id in the request")
+		}
+
+		shippers, err := s.service.View(int64(id))
+		if err != nil {
+			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:view:error", err.Error()))
+			return
+		}
+		responses.WriteJSON(w, http.StatusOK, responses.NewShipperViewSuccessResponse(shippers))
 	}
 }
