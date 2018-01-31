@@ -59,3 +59,9 @@ func NewShipperViewSuccessResponse(shipper model.Shipper) *Response {
 		Success: "true",
 	}
 }
+
+func NewShipperDeleteSuccessResponse() *Response {
+	return &Response{
+		Success: "true",
+	}
+}

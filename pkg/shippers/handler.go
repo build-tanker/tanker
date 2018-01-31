@@ -1,7 +1,7 @@
 package shippers
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -46,7 +46,6 @@ func (s *ShipperHandler) parseKeyFromQuery(r *http.Request, key string) string {
 
 func (s *ShipperHandler) parseKeyFromVars(r *http.Request, key string) string {
 	vars := mux.Vars(r)
-	fmt.Println(vars)
 	return vars[key]
 }
 
@@ -71,7 +70,8 @@ func (s *ShipperHandler) View(ctx *appcontext.AppContext) HTTPHandler {
 		idString := s.parseKeyFromVars(r, "id")
 		id, err := strconv.Atoi(idString)
 		if err != nil {
-			ctx.GetLogger().Infoln("Could not find id in the request")
+			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:view:notFound", errors.New("Could not find id in the request").Error()))
+			return
 		}
 
 		shippers, err := s.service.View(int64(id))
@@ -80,5 +80,24 @@ func (s *ShipperHandler) View(ctx *appcontext.AppContext) HTTPHandler {
 			return
 		}
 		responses.WriteJSON(w, http.StatusOK, responses.NewShipperViewSuccessResponse(shippers))
+	}
+}
+
+// /v1/shippers/id
+func (s *ShipperHandler) Delete(ctx *appcontext.AppContext) HTTPHandler {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idString := s.parseKeyFromVars(r, "id")
+		id, err := strconv.Atoi(idString)
+		if err != nil {
+			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:delete:notFound", errors.New("Could not find id in the request").Error()))
+			return
+		}
+
+		err = s.service.Delete(int64(id))
+		if err != nil {
+			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:delete:error", err.Error()))
+			return
+		}
+		responses.WriteJSON(w, http.StatusOK, responses.NewShipperDeleteSuccessResponse())
 	}
 }

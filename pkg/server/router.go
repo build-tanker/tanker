@@ -32,9 +32,9 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 	// GET___ .../v1/shippers/id
 	router.HandleFunc("/v1/shippers/{id}", shipperHandler.View(ctx)).Methods(http.MethodGet)
 	// PUT___ .../v1/shippers/id?name=shipper_name&machineName=machine_name
-	router.HandleFunc("/v1/shippers/{id}", FakeHandler(ctx, db)).Methods(http.MethodPut)
+	// router.HandleFunc("/v1/shippers/{id}", FakeHandler(ctx, db)).Methods(http.MethodPut)
 	// DELETE .../v1/shippers/id
-	router.HandleFunc("/v1/shippers/{id}", FakeHandler(ctx, db)).Methods(http.MethodDelete)
+	router.HandleFunc("/v1/shippers/{id}", shipperHandler.Delete(ctx)).Methods(http.MethodDelete)
 
 	// Builds
 	// POST__ .../v1/builds?accessKey=a1b2c3&buildSize=80&checksum=a1b2c3
