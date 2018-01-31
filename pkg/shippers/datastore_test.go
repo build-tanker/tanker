@@ -2,6 +2,7 @@ package shippers
 
 import (
 	"testing"
+	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
@@ -39,7 +40,7 @@ func TestShippersDatastoreAdd(t *testing.T) {
 	shipperDatastore := NewShipperDatastore(ctx, db)
 
 	mockQuery := "^INSERT INTO shippers (.+) RETURNING id$"
-	mockRows := sqlmock.NewRows([]string{"id", "access_key", "name", "machine_name", "created_at", "updated_at"}).AddRow(10, "8b0047c1-9e6a-46fb-9664-75ac60c3596a", "test", "machine.test", 1517161676, 1517161676)
+	mockRows := sqlmock.NewRows([]string{"id", "access_key", "name", "machine_name", "created_at", "updated_at"}).AddRow(10, "8b0047c1-9e6a-46fb-9664-75ac60c3596a", "test", "machine.test", time.Now(), time.Now())
 	mock.ExpectQuery(mockQuery).WillReturnRows(mockRows)
 
 	id, _, err := shipperDatastore.Add("test", "machine.test")
@@ -70,7 +71,7 @@ func TestShippersDatastoreView(t *testing.T) {
 	shipperDatastore := NewShipperDatastore(ctx, db)
 
 	mockQuery := "^SELECT \\* FROM shippers WHERE (.+)$"
-	mockRows := sqlmock.NewRows([]string{"id", "access_key", "name", "machine_name", "created_at", "updated_at"}).AddRow(10, "8b0047c1-9e6a-46fb-9664-75ac60c3596a", "test1", "machine.test1", 1517161676, 1517161676)
+	mockRows := sqlmock.NewRows([]string{"id", "access_key", "name", "machine_name", "created_at", "updated_at"}).AddRow(10, "8b0047c1-9e6a-46fb-9664-75ac60c3596a", "test1", "machine.test1", time.Now(), time.Now())
 	mock.ExpectQuery(mockQuery).WillReturnRows(mockRows)
 
 	shipper, err := shipperDatastore.View(10)
@@ -86,8 +87,8 @@ func TestShippersDatastoreViewAll(t *testing.T) {
 	ctx := NewTestDatastoreContext()
 	shipperDatastore := NewShipperDatastore(ctx, db)
 
-	mockQuery := "^SELECT \\* FROM shippers LIMIT 0, 100$"
-	mockRows := sqlmock.NewRows([]string{"id", "access_key", "name", "machine_name", "created_at", "updated_at"}).AddRow(10, "8b0047c1-9e6a-46fb-9664-75ac60c3596a", "test1", "machine.test1", 1517161676, 1517161676).AddRow(11, "8b0047c1-9e6a-46fb-9664-75ac60c3596b", "test2", "machine.test2", 1517161676, 1517161676).AddRow(12, "8b0047c1-9e6a-46fb-9664-75ac60c3596c", "test3", "machine.test3", 1517161676, 1517161676)
+	mockQuery := "^SELECT \\* FROM shippers LIMIT 100 OFFSET 0$"
+	mockRows := sqlmock.NewRows([]string{"id", "access_key", "name", "machine_name", "created_at", "updated_at"}).AddRow(10, "8b0047c1-9e6a-46fb-9664-75ac60c3596a", "test1", "machine.test1", time.Now(), time.Now()).AddRow(11, "8b0047c1-9e6a-46fb-9664-75ac60c3596b", "test2", "machine.test2", time.Now(), time.Now()).AddRow(12, "8b0047c1-9e6a-46fb-9664-75ac60c3596c", "test3", "machine.test3", time.Now(), time.Now())
 	mock.ExpectQuery(mockQuery).WillReturnRows(mockRows)
 
 	shippers, err := shipperDatastore.ViewAll()
