@@ -16,15 +16,15 @@ import (
 	"github.com/sudhanshuraheja/tanker/pkg/postgresmock"
 )
 
-var shipperDatastoreTestContext *appcontext.AppContext
+var shipperTestContext *appcontext.AppContext
 
-func NewTestDatastoreContext() *appcontext.AppContext {
-	if shipperDatastoreTestContext == nil {
+func NewTestContext() *appcontext.AppContext {
+	if shipperTestContext == nil {
 		conf := config.NewConfig()
 		log := logger.NewLogger(conf)
-		shipperDatastoreTestContext = appcontext.NewAppContext(conf, log)
+		shipperTestContext = appcontext.NewAppContext(conf, log)
 	}
-	return shipperDatastoreTestContext
+	return shipperTestContext
 }
 
 func NewTestPostgresDatastore(ctx *appcontext.AppContext) *sqlx.DB {
@@ -36,7 +36,7 @@ func TestShippersDatastoreAdd(t *testing.T) {
 	db, mock := postgresmock.NewMockSqlxDB()
 	defer postgresmock.CloseMockSqlxDB(db)
 
-	ctx := NewTestDatastoreContext()
+	ctx := NewTestContext()
 	shipperDatastore := NewShipperDatastore(ctx, db)
 
 	mockQuery := "^INSERT INTO shippers (.+) RETURNING id$"
@@ -52,7 +52,7 @@ func TestShippersDatastoreDelete(t *testing.T) {
 	db, mock := postgresmock.NewMockSqlxDB()
 	defer postgresmock.CloseMockSqlxDB(db)
 
-	ctx := NewTestDatastoreContext()
+	ctx := NewTestContext()
 	shipperDatastore := NewShipperDatastore(ctx, db)
 
 	mockQuery := "^DELETE FROM shippers"
@@ -67,7 +67,7 @@ func TestShippersDatastoreView(t *testing.T) {
 	db, mock := postgresmock.NewMockSqlxDB()
 	defer postgresmock.CloseMockSqlxDB(db)
 
-	ctx := NewTestDatastoreContext()
+	ctx := NewTestContext()
 	shipperDatastore := NewShipperDatastore(ctx, db)
 
 	mockQuery := "^SELECT \\* FROM shippers WHERE (.+)$"
@@ -84,7 +84,7 @@ func TestShippersDatastoreViewAll(t *testing.T) {
 	db, mock := postgresmock.NewMockSqlxDB()
 	defer postgresmock.CloseMockSqlxDB(db)
 
-	ctx := NewTestDatastoreContext()
+	ctx := NewTestContext()
 	shipperDatastore := NewShipperDatastore(ctx, db)
 
 	mockQuery := "^SELECT \\* FROM shippers LIMIT 100 OFFSET 0$"
