@@ -25,15 +25,15 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 
 	// Shippers
 	// POST__ .../v1/shippers?name=shipper_name&machineName=machine_name
-	router.HandleFunc("/v1/shippers", shipperHandler.Add(ctx)).Methods(http.MethodPost)
+	router.HandleFunc("/v1/shippers", shipperHandler.Add()).Methods(http.MethodPost)
 	// GET___ .../v1/shippers?page=1&count=25
-	router.HandleFunc("/v1/shippers", shipperHandler.ViewAll(ctx)).Methods(http.MethodGet)
+	router.HandleFunc("/v1/shippers", shipperHandler.ViewAll()).Methods(http.MethodGet)
 	// GET___ .../v1/shippers/id
-	router.HandleFunc("/v1/shippers/{id}", shipperHandler.View(ctx)).Methods(http.MethodGet)
+	router.HandleFunc("/v1/shippers/{id}", shipperHandler.View()).Methods(http.MethodGet)
 	// PUT___ .../v1/shippers/id?name=shipper_name&machineName=machine_name
 	// router.HandleFunc("/v1/shippers/{id}", FakeHandler(ctx, db)).Methods(http.MethodPut)
 	// DELETE .../v1/shippers/id
-	router.HandleFunc("/v1/shippers/{id}", shipperHandler.Delete(ctx)).Methods(http.MethodDelete)
+	router.HandleFunc("/v1/shippers/{id}", shipperHandler.Delete()).Methods(http.MethodDelete)
 
 	// Builds
 	// POST__ .../v1/builds?accessKey=a1b2c3&buildSize=80&checksum=a1b2c3

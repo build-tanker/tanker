@@ -2,6 +2,7 @@ package shippers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -15,23 +16,25 @@ import (
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)
 
 type Handler interface {
-	Add(*appcontext.AppContext) HTTPHandler
-	ViewAll(ctx *appcontext.AppContext) HTTPHandler
-	View(ctx *appcontext.AppContext) HTTPHandler
-	Delete(ctx *appcontext.AppContext) HTTPHandler
+	Add() HTTPHandler
+	ViewAll() HTTPHandler
+	View() HTTPHandler
+	Delete() HTTPHandler
 }
 
 type handler struct {
+	ctx     *appcontext.AppContext
 	service Service
 }
 
 func NewHandler(ctx *appcontext.AppContext, db *sqlx.DB) Handler {
 	return &handler{
+		ctx:     ctx,
 		service: NewService(ctx, db),
 	}
 }
 
-func (s *handler) Add(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) Add() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		name := s.parseKeyFromQuery(r, "name")
 		machineName := s.parseKeyFromQuery(r, "machineName")
@@ -62,11 +65,12 @@ func (s *handler) parseKeyFromQuery(r *http.Request, key string) string {
 
 func (s *handler) parseKeyFromVars(r *http.Request, key string) string {
 	vars := mux.Vars(r)
+	fmt.Println(vars)
 	return vars[key]
 }
 
 // /v1/shippers?page=1&count=25
-func (s *handler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) ViewAll() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// page := s.parseKeyFromQuery(r, "page")
 		// count := s.parseKeyFromQuery(r, "count")
@@ -84,7 +88,7 @@ func (s *handler) ViewAll(ctx *appcontext.AppContext) HTTPHandler {
 }
 
 // /v1/shippers/id
-func (s *handler) View(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) View() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idString := s.parseKeyFromVars(r, "id")
 		id, err := strconv.Atoi(idString)
@@ -106,7 +110,7 @@ func (s *handler) View(ctx *appcontext.AppContext) HTTPHandler {
 }
 
 // /v1/shippers/id
-func (s *handler) Delete(ctx *appcontext.AppContext) HTTPHandler {
+func (s *handler) Delete() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idString := s.parseKeyFromVars(r, "id")
 		id, err := strconv.Atoi(idString)
