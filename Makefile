@@ -41,6 +41,7 @@ clean:
 init:
 	@echo "$(GREEN_COLOR)Initialising dep for the first time $(END_COLOR)"
 	go get -u github.com/golang/dep/cmd/dep
+	go get -u github.com/golang/lint/golint
 
 ### Update dependencies
 update:
@@ -60,8 +61,7 @@ vet:
 ### Check for linting issues
 lint:
 	@echo "$(GREEN_COLOR)Running lint $(END_COLOR)"
-	@echo "$(RED_COLOR)Linting is not running, fix in Makefile $(END_COLOR)"
-	#golint ./... | grep -v vendor
+	golint ./... | grep -v vendor | grep -v "should have comment or be unexported"
 
 ### Copy config from template
 copy-config:
