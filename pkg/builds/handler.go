@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"source.golabs.io/core/tanker/pkg/appcontext"
+	"source.golabs.io/core/tanker/pkg/responses"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)
@@ -20,20 +21,31 @@ type handler struct {
 }
 
 func NewHandler(ctx *appcontext.AppContext) Handler {
-	s := NewService()
+	b := NewService()
 	return &handler{
 		ctx:     ctx,
-		service: s,
+		service: b,
 	}
 }
 
-func (s *handler) Add() HTTPHandler {
+func (b *handler) Add() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
+		accessKey := b.parseKeyFromQuery(r, "accessKey")
+		bundleID := b.parseKeyFromQuery(r, "bundleID")
 
+		err := b.service.Add(accessKey, bundleID)
+		if err != nil {
+			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("build:add:error", err.Error()))
+			return
+		}
+
+		responses.WriteJSON(w, http.StatusOK, &responses.Response{
+			Success: "true",
+		})
 	}
 }
 
-func (s *handler) parseKeyFromQuery(r *http.Request, key string) string {
+func (b *handler) parseKeyFromQuery(r *http.Request, key string) string {
 	value := ""
 	if len(r.URL.Query()[key]) > 0 {
 		value = r.URL.Query()[key][0]
@@ -41,7 +53,7 @@ func (s *handler) parseKeyFromQuery(r *http.Request, key string) string {
 	return value
 }
 
-func (s *handler) parseKeyFromVars(r *http.Request, key string) string {
+func (b *handler) parseKeyFromVars(r *http.Request, key string) string {
 	vars := mux.Vars(r)
 	fmt.Println(vars)
 	return vars[key]

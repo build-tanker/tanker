@@ -36,10 +36,8 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 	router.HandleFunc("/v1/shippers/{id}", shipperHandler.Delete()).Methods(http.MethodDelete)
 
 	// Builds
-	// POST__ .../v1/builds?accessKey=a1b2c3&buildSize=80&checksum=a1b2c3
+	// POST__ .../v1/builds?accessKey=a1b2c3&bundle=com.me.app
 	router.HandleFunc("/v1/builds", FakeHandler(ctx, db)).Methods(http.MethodPost)
-	// POST__ .../v1/builds/abcdef?accessKey=a1b2c3
-	router.HandleFunc("/v1/builds/{id}", FakeHandler(ctx, db)).Methods(http.MethodPost)
 	return router
 }
 
