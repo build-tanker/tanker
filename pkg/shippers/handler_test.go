@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"source.golabs.io/core/tanker/pkg/appcontext"
 )
 
 type MockService struct {

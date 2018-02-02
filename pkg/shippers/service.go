@@ -2,7 +2,7 @@ package shippers
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"source.golabs.io/core/tanker/pkg/appcontext"
 )
 
 type Service interface {

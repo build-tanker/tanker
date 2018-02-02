@@ -7,10 +7,10 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/sudhanshuraheja/tanker/pkg/responses"
+	"source.golabs.io/core/tanker/pkg/responses"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"source.golabs.io/core/tanker/pkg/appcontext"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)

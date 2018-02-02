@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/sudhanshuraheja/tanker/pkg/config"
+	"source.golabs.io/core/tanker/pkg/config"
 )
 
 func TestConfigValues(t *testing.T) {

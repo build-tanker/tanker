@@ -1,8 +1,8 @@
 package appcontext
 
 import (
-	"github.com/sudhanshuraheja/tanker/pkg/config"
-	"github.com/sudhanshuraheja/tanker/pkg/logger"
+	"source.golabs.io/core/tanker/pkg/config"
+	"source.golabs.io/core/tanker/pkg/logger"
 )
 
 type AppContext struct {

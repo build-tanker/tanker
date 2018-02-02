@@ -6,9 +6,9 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/gorilla/mux"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
-	"github.com/sudhanshuraheja/tanker/pkg/pings"
-	"github.com/sudhanshuraheja/tanker/pkg/shippers"
+	"source.golabs.io/core/tanker/pkg/appcontext"
+	"source.golabs.io/core/tanker/pkg/pings"
+	"source.golabs.io/core/tanker/pkg/shippers"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)
