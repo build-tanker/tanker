@@ -1,14 +1,14 @@
 package builds
 
-type BuildsService interface {
+type Service interface {
 	// UploadBuild()
 	// UploadBuildChunk()
 	// MigrateBuild()
 }
 
-type buildsService struct {
+type service struct {
 }
 
-func NewBuildsService() BuildsService {
-	return &buildsService{}
+func NewService() Service {
+	return &service{}
 }
