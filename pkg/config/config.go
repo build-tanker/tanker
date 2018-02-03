@@ -16,8 +16,8 @@ type Config struct {
 	enableStaticFileServer bool
 	enableGzipCompression  bool
 	enableDelayMiddleware  bool
-	gcpJSONConfig          string
-	gcpBucket              string
+	gcsJSONConfig          string
+	gcsBucket              string
 	database               DatabaseConfig
 }
 
@@ -67,6 +67,10 @@ func (c *Config) LogLevel() string {
 	return c.logLevel
 }
 
+func (c *Config) FileStore() string {
+	return c.fileStore
+}
+
 func (c *Config) Port() string {
 	return c.port
 }
@@ -87,6 +91,14 @@ func (c *Config) Database() DatabaseConfig {
 	return c.database
 }
 
+func (c *Config) GCSJSONConfig() string {
+	return c.gcsJSONConfig
+}
+
+func (c *Config) GCSBucket() string {
+	return c.gcsBucket
+}
+
 func (c *Config) readLatestConfig() {
 	c.name = viper.GetString("application.name")
 	c.version = viper.GetString("application.version")
@@ -96,7 +108,7 @@ func (c *Config) readLatestConfig() {
 	c.enableStaticFileServer = viper.GetBool("server.enableStaticFileServer")
 	c.enableGzipCompression = viper.GetBool("server.enableGzipCompression")
 	c.enableDelayMiddleware = viper.GetBool("server.enableDelayMiddleware")
-	c.gcpJSONConfig = viper.GetString("googlecloud.jsonConfig")
-	c.gcpBucket = viper.GetString("googlecloud.bucket")
+	c.gcsJSONConfig = viper.GetString("googlecloud.jsonConfig")
+	c.gcsBucket = viper.GetString("googlecloud.bucket")
 	c.database = NewDatabaseConfig()
 }
