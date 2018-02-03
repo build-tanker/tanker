@@ -2,6 +2,7 @@
 name = "tanker"
 version = "0.0.1"
 logLevel = "debug"
+fileStore = "googlecloud"
 
 [server]
 port = "3000"
@@ -16,3 +17,7 @@ password = "tanker"
 host = "localhost"
 port = 5432
 maxPoolSize = 10
+
+[googlecloud]
+jsonConfig = "/Users/sudhanshu/private/flying-monkey-club-1483.json"
+bucket = "shrieking-cat"
