@@ -43,17 +43,17 @@ func NewTestGoogleCloudStorageFileStore() *googleCloudStorageFileStore {
 	}
 }
 
-func TestReadPEMFile(t *testing.T) {
-	g := NewTestGoogleCloudStorageFileStore()
-	g.ReadPEMFile("testFile")
-
-	assert.Equal(t, "https://accounts.google.com/o/oauth2/auth", g.creds.AuthURI)
-}
-
 func TestWriteURL(t *testing.T) {
 	g := NewTestGoogleCloudStorageFileStore()
-	g.ReadPEMFile("testFile")
+
+	err := g.Setup()
+	if err != nil {
+		t.Log("Could not setup GCS File store")
+		t.Fail()
+	}
+
 	final, err := g.GetWriteURL()
-	assert.Equal(t, "https://storage.googleapis.com/testBucket/cat.jpeg", final)
 	assert.Nil(t, err)
+	assert.Equal(t, "https://accounts.google.com/o/oauth2/auth", g.creds.AuthURI)
+	assert.Equal(t, "https://storage.googleapis.com/testBucket/cat.jpeg", final)
 }

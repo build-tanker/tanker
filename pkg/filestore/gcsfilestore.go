@@ -2,6 +2,8 @@ package filestore
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -59,9 +61,18 @@ func (g *googleCloudStorageFileStore) GetWriteURL() (string, error) {
 	return signed, nil
 }
 
-func (g *googleCloudStorageFileStore) ReadPEMFile(file string) error {
+func (g *googleCloudStorageFileStore) Setup() error {
+	log := g.ctx.GetLogger()
+	file := g.ctx.GetConfig().GCSJSONConfig()
+	if file == "" {
+		errMessage := fmt.Sprintln("Please define the config file google cloud storage. Current setup:", file)
+		log.Fatalln(errMessage)
+		return errors.New(errMessage)
+	}
+
 	data, err := g.fs.ReadCompleteFileFromDisk(file)
 	if err != nil {
+		log.Fatalln(err.Error())
 		return err
 	}
 	json.Unmarshal(data, &g.creds)
