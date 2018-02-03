@@ -25,7 +25,7 @@ type BuildAddResponse struct {
 }
 
 func NewHandler(ctx *appcontext.AppContext) Handler {
-	b := NewService()
+	b := NewService(ctx)
 	return &handler{
 		ctx:     ctx,
 		service: b,
