@@ -11,10 +11,13 @@ type Config struct {
 	name                   string
 	version                string
 	logLevel               string
+	fileStore              string
 	port                   string
 	enableStaticFileServer bool
 	enableGzipCompression  bool
 	enableDelayMiddleware  bool
+	gcpJSONConfig          string
+	gcpBucket              string
 	database               DatabaseConfig
 }
 
@@ -31,10 +34,13 @@ func NewConfig() *Config {
 	viper.SetDefault("application.name", "tanker")
 	viper.SetDefault("application.version", "NotDefined")
 	viper.SetDefault("application.logLevel", "debug")
+	viper.SetDefault("application.fileStore", "googlecloud")
 	viper.SetDefault("server.port", "4000")
 	viper.SetDefault("server.enableStaticFileServer", false)
 	viper.SetDefault("server.enableGzipCompression", true)
 	viper.SetDefault("server.enableDelayMiddleware", false)
+	viper.SetDefault("googlecloud.jsonConfig", "")
+	viper.SetDefault("googlecloud.bucket", "shrieking-cat")
 
 	viper.ReadInConfig()
 
@@ -85,9 +91,12 @@ func (c *Config) readLatestConfig() {
 	c.name = viper.GetString("application.name")
 	c.version = viper.GetString("application.version")
 	c.logLevel = viper.GetString("application.logLevel")
+	c.fileStore = viper.GetString("application.fileStore")
 	c.port = viper.GetString("server.port")
 	c.enableStaticFileServer = viper.GetBool("server.enableStaticFileServer")
 	c.enableGzipCompression = viper.GetBool("server.enableGzipCompression")
 	c.enableDelayMiddleware = viper.GetBool("server.enableDelayMiddleware")
+	c.gcpJSONConfig = viper.GetString("googlecloud.jsonConfig")
+	c.gcpBucket = viper.GetString("googlecloud.bucket")
 	c.database = NewDatabaseConfig()
 }
