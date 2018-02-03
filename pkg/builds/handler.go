@@ -20,6 +20,10 @@ type handler struct {
 	service Service
 }
 
+type BuildAddResponse struct {
+	URL string `json:"url"`
+}
+
 func NewHandler(ctx *appcontext.AppContext) Handler {
 	b := NewService()
 	return &handler{
@@ -33,13 +37,16 @@ func (b *handler) Add() HTTPHandler {
 		accessKey := b.parseKeyFromQuery(r, "accessKey")
 		bundleID := b.parseKeyFromQuery(r, "bundleID")
 
-		err := b.service.Add(accessKey, bundleID)
+		url, err := b.service.Add(accessKey, bundleID)
 		if err != nil {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("build:add:error", err.Error()))
 			return
 		}
 
 		responses.WriteJSON(w, http.StatusOK, &responses.Response{
+			Data: &BuildAddResponse{
+				URL: url,
+			},
 			Success: "true",
 		})
 	}

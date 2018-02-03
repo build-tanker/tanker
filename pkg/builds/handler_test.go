@@ -1,6 +1,7 @@
 package builds
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,8 +16,8 @@ func NewMockService() Service {
 	return MockService{}
 }
 
-func (m MockService) Add(accessKey string, bundle string) error {
-	return nil
+func (m MockService) Add(accessKey string, bundle string) (string, error) {
+	return "https://mockBucket.storage.googleapis.com/mockFile", nil
 }
 
 func NewTestHandler() *handler {
@@ -42,5 +43,9 @@ func TestAdd(t *testing.T) {
 	router.ServeHTTP(response, req)
 
 	assert.Equal(t, 200, response.Code)
-	assert.Equal(t, "{\"success\":\"true\"}\n", response.Body.String())
+
+	var r map[string]interface{}
+	json.Unmarshal(response.Body.Bytes(), &r)
+	assert.Equal(t, "true", r["success"].(string))
+	assert.Equal(t, "https://mockBucket.storage.googleapis.com/mockFile", r["data"].(map[string]interface{})["url"].(string))
 }
