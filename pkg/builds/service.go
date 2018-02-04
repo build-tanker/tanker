@@ -1,6 +1,7 @@
 package builds
 
 import (
+	"github.com/jmoiron/sqlx"
 	"source.golabs.io/core/tanker/pkg/appcontext"
 	"source.golabs.io/core/tanker/pkg/filestore"
 )
@@ -10,13 +11,16 @@ type Service interface {
 }
 
 type service struct {
-	ctx *appcontext.AppContext
-	fs  filestore.FileStore
+	ctx       *appcontext.AppContext
+	fs        filestore.FileStore
+	datastore Datastore
 }
 
-func NewService(ctx *appcontext.AppContext) Service {
+func NewService(ctx *appcontext.AppContext, db *sqlx.DB) Service {
+	datastore := NewDatastore(ctx, db)
 	s := &service{
-		ctx: ctx,
+		ctx:       ctx,
+		datastore: datastore,
 	}
 	s.init()
 	return s
@@ -44,6 +48,14 @@ func (s *service) init() {
 func (s *service) Add(accessKey string, bundle string) (string, error) {
 	// Does two things
 	// Get a url from the google cloud package and return it
+	url, err := s.fs.GetWriteURL()
+	if err != nil {
+		return "", err
+	}
 	// Create an entry in the database
-	return "", nil
+	_, err = s.datastore.Add(accessKey, bundle)
+	if err != nil {
+		return "", err
+	}
+	return url, nil
 }

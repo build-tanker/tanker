@@ -29,7 +29,7 @@ func NewTestHandler() *handler {
 	}
 }
 
-func TestAdd(t *testing.T) {
+func TestHandlerAdd(t *testing.T) {
 	h := NewTestHandler()
 
 	req, err := http.NewRequest(http.MethodPost, "/v1/builds?accessKey=a1b2c3&bundle=com.me.app", nil)

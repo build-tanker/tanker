@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/jmoiron/sqlx"
+
 	"github.com/gorilla/mux"
 	"source.golabs.io/core/tanker/pkg/appcontext"
 	"source.golabs.io/core/tanker/pkg/responses"
@@ -24,8 +26,8 @@ type BuildAddResponse struct {
 	URL string `json:"url"`
 }
 
-func NewHandler(ctx *appcontext.AppContext) Handler {
-	b := NewService(ctx)
+func NewHandler(ctx *appcontext.AppContext, db *sqlx.DB) Handler {
+	b := NewService(ctx, db)
 	return &handler{
 		ctx:     ctx,
 		service: b,

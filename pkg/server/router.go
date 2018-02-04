@@ -3,6 +3,8 @@ package server
 import (
 	"net/http"
 
+	"source.golabs.io/core/tanker/pkg/builds"
+
 	"github.com/jmoiron/sqlx"
 
 	"github.com/gorilla/mux"
@@ -18,6 +20,7 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 	pingHandler := pings.PingHandler{}
 
 	shipperHandler := shippers.NewHandler(ctx, db)
+	buildsHandler := builds.NewHandler(ctx, db)
 
 	router := mux.NewRouter()
 	// GET___ .../ping
@@ -37,7 +40,7 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 
 	// Builds
 	// POST__ .../v1/builds?accessKey=a1b2c3&bundle=com.me.app
-	router.HandleFunc("/v1/builds", FakeHandler(ctx, db)).Methods(http.MethodPost)
+	router.HandleFunc("/v1/builds", buildsHandler.Add()).Methods(http.MethodPost)
 	return router
 }
 
