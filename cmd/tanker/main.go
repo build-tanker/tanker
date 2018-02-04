@@ -19,7 +19,7 @@ func main() {
 	db := postgres.NewPostgres(logger, config.Database().ConnectionURL(), config.Database().MaxPoolSize())
 	server := server.NewServer(ctx, db)
 
-	logger.Infoln("Starting sample-cli")
+	logger.Infoln("Starting tanker")
 
 	app := cli.NewApp()
 	app.Name = config.Name()

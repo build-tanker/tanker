@@ -1,6 +1,8 @@
 package filesystem
 
-import "io/ioutil"
+import (
+	"io/ioutil"
+)
 
 type FileSystem interface {
 	ReadCompleteFileFromDisk(path string) ([]byte, error)
