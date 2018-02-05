@@ -22,7 +22,7 @@ type Shipper struct {
 
 type Datastore interface {
 	Add(name string, machineName string) (int64, string, error)
-	Delete(id int64) error
+	Delete(accessKey string) error
 	View(id int64) (Shipper, error)
 	ViewAll() ([]Shipper, error)
 }
@@ -64,8 +64,8 @@ func (s *datastore) generateUUID() string {
 	return uuid.NewV4().String()
 }
 
-func (s *datastore) Delete(id int64) error {
-	_, err := s.db.Exec("DELETE FROM shippers WHERE id=$1", id)
+func (s *datastore) Delete(accessKey string) error {
+	_, err := s.db.Exec("DELETE FROM shippers WHERE access_key=$1", accessKey)
 	if err != nil {
 		return err
 	}

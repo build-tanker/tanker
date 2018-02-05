@@ -17,7 +17,7 @@ func (m *MockDatastore) Add(name string, machineName string) (int64, string, err
 	return 55, "testAccessKey", nil
 }
 
-func (m *MockDatastore) Delete(id int64) error {
+func (m *MockDatastore) Delete(accessKey string) error {
 	return nil
 }
 

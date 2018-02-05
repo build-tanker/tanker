@@ -31,6 +31,7 @@ func (s *Server) Start() error {
 
 	server := negroni.New()
 	server.Use(negroni.NewRecovery())
+	server.Use(negroni.NewLogger())
 
 	router := Router(s.ctx, s.db)
 

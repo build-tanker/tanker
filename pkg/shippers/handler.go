@@ -112,14 +112,13 @@ func (s *handler) View() HTTPHandler {
 // /v1/shippers/id
 func (s *handler) Delete() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		idString := s.parseKeyFromVars(r, "id")
-		id, err := strconv.Atoi(idString)
-		if err != nil {
+		accessKey := s.parseKeyFromVars(r, "accessKey")
+		if accessKey == "" {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:delete:notFound", errors.New("Could not find id in the request").Error()))
 			return
 		}
 
-		err = s.service.Delete(int64(id))
+		err := s.service.Delete(accessKey)
 		if err != nil {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:delete:error", err.Error()))
 			return

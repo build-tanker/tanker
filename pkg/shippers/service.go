@@ -7,7 +7,7 @@ import (
 
 type Service interface {
 	Add(name string, machineName string) (int64, string, error)
-	Delete(id int64) error
+	Delete(accessKey string) error
 	View(id int64) (Shipper, error)
 	ViewAll() ([]Shipper, error)
 }
@@ -26,8 +26,8 @@ func (s *service) Add(name, machineName string) (int64, string, error) {
 	return s.datastore.Add(name, machineName)
 }
 
-func (s *service) Delete(id int64) error {
-	return s.datastore.Delete(id)
+func (s *service) Delete(accessKey string) error {
+	return s.datastore.Delete(accessKey)
 }
 
 func (s *service) View(id int64) (Shipper, error) {

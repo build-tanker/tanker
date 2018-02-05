@@ -59,7 +59,7 @@ func TestDatastoreDelete(t *testing.T) {
 	mockRows := sqlmock.NewResult(0, 0)
 	mock.ExpectExec(mockQuery).WillReturnResult(mockRows)
 
-	err := datastore.Delete(10)
+	err := datastore.Delete("10")
 	assert.Nil(t, err)
 }
 

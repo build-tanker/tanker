@@ -27,7 +27,7 @@ func (m *MockService) Add(name string, machineName string) (int64, string, error
 	return 15, "testAccessKey", nil
 }
 
-func (m *MockService) Delete(id int64) error {
+func (m *MockService) Delete(accessKey string) error {
 	return nil
 }
 
