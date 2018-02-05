@@ -125,7 +125,7 @@ func TestHandlerDelete(t *testing.T) {
 
 	response := httptest.NewRecorder()
 	router := mux.NewRouter()
-	router.HandleFunc("/v1/shippers/{id}", h.Delete()).Methods(http.MethodDelete)
+	router.HandleFunc("/v1/shippers/{accessKey}", h.Delete()).Methods(http.MethodDelete)
 	router.ServeHTTP(response, req)
 
 	assert.Equal(t, 200, response.Code)

@@ -1,9 +1,7 @@
 package responses
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -12,9 +10,9 @@ func WriteJSON(w http.ResponseWriter, status int, i interface{}) {
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(i)
 
-	var b bytes.Buffer
-	json.NewEncoder(&b).Encode(i)
-	fmt.Printf(b.String())
+	// var b bytes.Buffer
+	// json.NewEncoder(&b).Encode(i)
+	// fmt.Printf(b.String())
 }
 
 type Response struct {

@@ -2,7 +2,6 @@ package shippers
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -65,7 +64,6 @@ func (s *handler) parseKeyFromQuery(r *http.Request, key string) string {
 
 func (s *handler) parseKeyFromVars(r *http.Request, key string) string {
 	vars := mux.Vars(r)
-	fmt.Println(vars)
 	return vars[key]
 }
 

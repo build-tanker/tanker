@@ -65,7 +65,7 @@ func TestServiceAdd(t *testing.T) {
 
 func TestServiceDelete(t *testing.T) {
 	ss := NewTestService()
-	err := ss.Delete(5)
+	err := ss.Delete("5")
 	assert.Nil(t, err)
 }
 

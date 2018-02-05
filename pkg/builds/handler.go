@@ -1,7 +1,6 @@
 package builds
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/jmoiron/sqlx"
@@ -64,6 +63,5 @@ func (b *handler) parseKeyFromQuery(r *http.Request, key string) string {
 
 func (b *handler) parseKeyFromVars(r *http.Request, key string) string {
 	vars := mux.Vars(r)
-	fmt.Println(vars)
 	return vars[key]
 }
