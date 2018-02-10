@@ -36,7 +36,7 @@ func NewHandler(ctx *appcontext.AppContext, db *sqlx.DB) Handler {
 func (b *handler) Add() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		accessKey := b.parseKeyFromQuery(r, "accessKey")
-		bundleID := b.parseKeyFromQuery(r, "bundleID")
+		bundleID := b.parseKeyFromQuery(r, "bundle")
 
 		url, err := b.service.Add(accessKey, bundleID)
 		if err != nil {

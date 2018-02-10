@@ -9,8 +9,8 @@ CREATE TABLE shippers (
 
 CREATE TABLE builds (
   id BIGSERIAL NOT NULL PRIMARY KEY,
-  shipper BIGINT,
-  bundle_id VARCHAR(128) NOT NULL UNIQUE,
+  shipper VARCHAR(128),
+  bundle_id VARCHAR(128),
   upload_complete BOOLEAN,
   migrated BOOLEAN,
   created_at TIMESTAMP default NOW(),
