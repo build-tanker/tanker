@@ -3,14 +3,14 @@ package server
 import (
 	"net/http"
 
-	"source.golabs.io/core/tanker/pkg/builds"
+	"github.com/sudhanshuraheja/tanker/pkg/builds"
 
 	"github.com/jmoiron/sqlx"
 
 	"github.com/gorilla/mux"
-	"source.golabs.io/core/tanker/pkg/appcontext"
-	"source.golabs.io/core/tanker/pkg/pings"
-	"source.golabs.io/core/tanker/pkg/shippers"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/pings"
+	"github.com/sudhanshuraheja/tanker/pkg/shippers"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)

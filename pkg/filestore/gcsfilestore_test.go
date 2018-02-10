@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"source.golabs.io/core/tanker/pkg/filesystem"
+	"github.com/sudhanshuraheja/tanker/pkg/filesystem"
 )
 
 type MockGoogleCloudStorage struct{}

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"source.golabs.io/core/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
 type Build struct {

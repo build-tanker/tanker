@@ -2,8 +2,8 @@ package builds
 
 import (
 	"github.com/jmoiron/sqlx"
-	"source.golabs.io/core/tanker/pkg/appcontext"
-	"source.golabs.io/core/tanker/pkg/filestore"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/filestore"
 )
 
 type Service interface {

@@ -6,10 +6,10 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"source.golabs.io/core/tanker/pkg/responses"
+	"github.com/sudhanshuraheja/tanker/pkg/responses"
 
 	"github.com/jmoiron/sqlx"
-	"source.golabs.io/core/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)

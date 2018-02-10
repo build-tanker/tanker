@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"source.golabs.io/core/tanker/pkg/config"
+	"github.com/sudhanshuraheja/tanker/pkg/config"
 )
 
 type Logger struct {

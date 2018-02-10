@@ -10,7 +10,7 @@ import (
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urfave/negroni"
 
-	"source.golabs.io/core/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
 type Server struct {

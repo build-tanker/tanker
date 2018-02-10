@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"source.golabs.io/core/tanker/pkg/appcontext"
-	"source.golabs.io/core/tanker/pkg/config"
-	"source.golabs.io/core/tanker/pkg/logger"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/config"
+	"github.com/sudhanshuraheja/tanker/pkg/logger"
 )
 
 var pingHandlerTestContext *appcontext.AppContext

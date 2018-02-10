@@ -8,7 +8,7 @@ import (
 
 	"database/sql"
 
-	"source.golabs.io/core/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
 const migrationsPath = "file://./pkg/postgres/migrations"

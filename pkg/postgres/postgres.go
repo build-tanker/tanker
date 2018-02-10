@@ -5,7 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" // postgres driver
-	"source.golabs.io/core/tanker/pkg/logger"
+	"github.com/sudhanshuraheja/tanker/pkg/logger"
 )
 
 const connMaxLifetime = 30 * time.Minute

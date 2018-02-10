@@ -8,8 +8,8 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
-	"source.golabs.io/core/tanker/pkg/appcontext"
-	"source.golabs.io/core/tanker/pkg/filesystem"
+	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"github.com/sudhanshuraheja/tanker/pkg/filesystem"
 )
 
 type GoogleCloudStorageFileStore interface {
