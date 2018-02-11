@@ -31,6 +31,15 @@ git clone https://github.com/sudhanshuraheja/tanker.git
 make build_fresh
 ```
 
+Setup postgres
+
+```bash
+$ cd external
+$ docker-compose up
+$ tanker migrate
+repeat above till you see *Sadly, found no new migrations to run*
+```
+
 Start the binary by running tanker
 
 ```bash
