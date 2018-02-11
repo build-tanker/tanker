@@ -1,17 +1,18 @@
-# Tanker for BetaApp
+# Tanker
 
 Tanker is an Open source, Self Hosted, Mobile Releases Deployment tool for iOS and Android.
 
-WIP : We are not ready for production yet. You can sign up for our [newsletter here](https://goo.gl/forms/Ck0lnzdWQNyfD5Il2), we will reach out to you as soon as we are ready.
+*WIP : We are not ready for production yet. You can sign up for our [newsletter here](https://goo.gl/forms/Ck0lnzdWQNyfD5Il2), we will reach out to you as soon as we are ready.*
 
 ## Getting Started
 
-Tanker consists of two different components. Shipper, which connects to your CI or your local machine and uploads binaries. Tanker, is the backend that saves binaries on Google Cloud Storage and makes it available for user's who should have access. Here are the repo
+Tanker consists of two different components.
 
-[Tanker](https://github.com/sudhanshuraheja/tanker)
-[Shipper](https://github.com/sudhanshuraheja/shipper)
+[Shipper](https://github.com/sudhanshuraheja/shipper), which connects to your CI or your local machine and uploads binaries. 
 
-Please follow the instructions for both the repos
+[Tanker](https://github.com/sudhanshuraheja/tanker), is the backend that saves binaries on Google Cloud Storage and makes it available for user's who should have access.
+
+Please follow the instructions for both the repos.
 
 ### Prerequisites
 
