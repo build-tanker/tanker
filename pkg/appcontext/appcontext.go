@@ -5,22 +5,26 @@ import (
 	"github.com/sudhanshuraheja/tanker/pkg/logger"
 )
 
+// AppContext - global context for config and logging
 type AppContext struct {
 	config *config.Config
-	logger *logger.Logger
+	logger logger.Logger
 }
 
-func NewAppContext(config *config.Config, logger *logger.Logger) *AppContext {
+// NewAppContext - function to create a global context for conf and logging
+func NewAppContext(config *config.Config, logger logger.Logger) *AppContext {
 	return &AppContext{
 		config: config,
 		logger: logger,
 	}
 }
 
+// GetConfig - fetch the config from the global AppContext
 func (a *AppContext) GetConfig() *config.Config {
 	return a.config
 }
 
-func (a *AppContext) GetLogger() *logger.Logger {
+// GetLogger - fetch the logger from the global AppContext
+func (a *AppContext) GetLogger() logger.Logger {
 	return a.logger
 }
