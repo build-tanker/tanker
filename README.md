@@ -67,27 +67,23 @@ make lint
 
 ## Code Structure
 
-`/bin` compiled linux and mac binaries for the project, created with `make build`
-
-`/cmd` create multiple binaries from the app
-`/cmd/tanker` tanker binary
-
-`/external` has a docker-compose for dependencies, only for local setup, provides postgres, rabbitmq and redis
-
-`/pkg` internal packages
-`/pkg/shippers` handle functionality for shippers (service that uploads), has handler -> service -> datastore. Handler takes care of HTTP requests, Service takes care of validations etc, Datastore takes care of persisting to DB.
-`/pkg/builds` handle functionality for builds, has handler -> service -> datastore. Handler takes care of HTTP requests, Service takes care of validations etc, Datastore takes care of persisting to DB.
-`/pkg/filestore` store physical files, filestore -> gcsfilestore -> gcs. Filestore provides an interface, GCSFileStore provides an implementation for the interface for Google Cloud, GCS handles actual google cloud functionality
-`/pkg/pings` handle functionality for pings, should ideally have handler -> service -> datastore, but given that we only response with pong, only handler is implemented
-
-`/pkg/appcontext` create a context with config and logger to pass through the app
-`/pkg/config` handle config for app and database
-`/pkg/filesystem` provide a layer to mock the filesystem for tiny files
-`/pkg/logger` handle logging throughout the system, provides interface over logrus
-`/pkg/postgres` handles connections to postgres and migrations
-`/pkg/postgresmock` provides a mock sqlx database
-`/pkg/responses` provides generic response and error structures and responses
-`/pkg/server` provides a new server with negroni and a router
+* `/bin` compiled linux and mac binaries for the project, created with `make build`
+* `/cmd` create multiple binaries from the app
+* `/cmd/tanker` tanker binary
+* `/external` has a docker-compose for dependencies, only for local setup, provides postgres, rabbitmq and redis
+* `/pkg` internal packages
+* `/pkg/shippers` handle functionality for shippers (service that uploads), has handler -> service -> datastore. Handler takes care of HTTP requests, Service takes care of validations etc, Datastore takes care of persisting to DB.
+* `/pkg/builds` handle functionality for builds, has handler -> service -> datastore. Handler takes care of HTTP requests, Service takes care of validations etc, Datastore takes care of persisting to DB.
+* `/pkg/filestore` store physical files, filestore -> gcsfilestore -> gcs. Filestore provides an interface, GCSFileStore provides an implementation for the interface for Google Cloud, GCS handles actual google cloud functionality
+* `/pkg/pings` handle functionality for pings, should ideally have handler -> service -> datastore, but given that we only response with pong, only handler is implemented
+* `/pkg/appcontext` create a context with config and logger to pass through the app
+* `/pkg/config` handle config for app and database
+* `/pkg/filesystem` provide a layer to mock the filesystem for tiny files
+* `/pkg/logger` handle logging throughout the system, provides interface over logrus
+* `/pkg/postgres` handles connections to postgres and migrations
+* `/pkg/postgresmock` provides a mock sqlx database
+* `/pkg/responses` provides generic response and error structures and responses
+* `/pkg/server` provides a new server with negroni and a router
 
 ## Deployment
 
