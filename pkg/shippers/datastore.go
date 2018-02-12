@@ -30,7 +30,7 @@ type Datastore interface {
 type datastore struct {
 	ctx *appcontext.AppContext
 	db  *sqlx.DB
-	log *logger.Logger
+	log logger.Logger
 }
 
 func NewDatastore(ctx *appcontext.AppContext, db *sqlx.DB) Datastore {

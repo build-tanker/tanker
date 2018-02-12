@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	config := config.NewConfig()
+	config := config.NewConfig([]string{".", "..", "../.."})
 	logger := logger.NewLogger(config)
 	ctx := appcontext.NewAppContext(config, logger)
 	db := postgres.NewPostgres(logger, config.Database().ConnectionURL(), config.Database().MaxPoolSize())

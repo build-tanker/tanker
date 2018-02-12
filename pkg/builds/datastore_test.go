@@ -16,7 +16,7 @@ var testContext *appcontext.AppContext
 
 func NewTestContext() *appcontext.AppContext {
 	if testContext == nil {
-		conf := config.NewConfig()
+		conf := config.NewConfig([]string{".", "..", "../.."})
 		log := logger.NewLogger(conf)
 		testContext = appcontext.NewAppContext(conf, log)
 	}

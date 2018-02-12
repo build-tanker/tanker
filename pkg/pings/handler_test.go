@@ -34,7 +34,7 @@ func TestPingHandler(t *testing.T) {
 
 func NewPingHandlerTestContext() *appcontext.AppContext {
 	if pingHandlerTestContext == nil {
-		conf := config.NewConfig()
+		conf := config.NewConfig([]string{".", "..", "../.."})
 		log := logger.NewLogger(conf)
 		pingHandlerTestContext = appcontext.NewAppContext(conf, log)
 	}

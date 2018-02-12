@@ -12,13 +12,13 @@ type Logger struct {
 	*logrus.Logger
 }
 
-func NewLogger(config *config.Config) *Logger {
+func NewLogger(config *config.Config) Logger {
 	level, err := logrus.ParseLevel(config.LogLevel())
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
 
-	return &Logger{
+	return Logger{
 		&logrus.Logger{
 			Out:       os.Stdout,
 			Hooks:     make(logrus.LevelHooks),
