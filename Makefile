@@ -32,7 +32,7 @@ ALL_PACKAGES=$(go list ./... | grep -v "vendor")
 ### Clean temporary files
 clean:
 	@echo "$(GREEN_COLOR)Cleaning unwanted files $(END_COLOR)"
-	rm -rf application.toml
+	rm -rf tanker.toml
 	rm -rf coverage.txt
 	rm -rf coverage.html
 	rm -rf bin/
@@ -66,7 +66,7 @@ lint:
 ### Copy config from template
 copy-config:
 	@echo "$(GREEN_COLOR)Copying config from sample $(END_COLOR)"
-	cp application.toml.sample application.toml
+	cp tanker.toml.sample tanker.toml
 
 ### Manually test all packages
 test:

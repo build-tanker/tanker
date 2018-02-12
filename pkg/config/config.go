@@ -9,9 +9,6 @@ import (
 
 // Config - structure to hold the configuration for tanker
 type Config struct {
-	name                   string
-	version                string
-	logLevel               string
 	fileStore              string
 	port                   string
 	enableStaticFileServer bool
@@ -32,12 +29,9 @@ func NewConfig(paths []string) *Config {
 		viper.AddConfigPath(path)
 	}
 
-	viper.SetConfigName("application")
+	viper.SetConfigName("tanker")
 	viper.SetConfigType("toml")
 
-	viper.SetDefault("application.name", "tanker")
-	viper.SetDefault("application.version", "NotDefined")
-	viper.SetDefault("application.logLevel", "debug")
 	viper.SetDefault("application.fileStore", "googlecloud")
 	viper.SetDefault("server.port", "4000")
 	viper.SetDefault("server.enableStaticFileServer", false)
@@ -57,21 +51,6 @@ func NewConfig(paths []string) *Config {
 	config.readLatestConfig()
 
 	return config
-}
-
-// Name - get the app name from config
-func (c *Config) Name() string {
-	return c.name
-}
-
-// Version - get the app version from config
-func (c *Config) Version() string {
-	return c.version
-}
-
-// LogLevel - get the log level from config
-func (c *Config) LogLevel() string {
-	return c.logLevel
 }
 
 // FileStore - get the filestore from config
@@ -115,9 +94,6 @@ func (c *Config) GCSBucket() string {
 }
 
 func (c *Config) readLatestConfig() {
-	c.name = viper.GetString("application.name")
-	c.version = viper.GetString("application.version")
-	c.logLevel = viper.GetString("application.logLevel")
 	c.fileStore = viper.GetString("application.fileStore")
 	c.port = viper.GetString("server.port")
 	c.enableStaticFileServer = viper.GetBool("server.enableStaticFileServer")

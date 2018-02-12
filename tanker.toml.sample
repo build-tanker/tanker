@@ -1,7 +1,4 @@
 [application]
-name = "tanker"
-version = "0.0.1"
-logLevel = "debug"
 fileStore = "googlecloud"
 
 [server]
