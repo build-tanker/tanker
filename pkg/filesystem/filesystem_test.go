@@ -10,10 +10,20 @@ func NewTestFileSystem() FileSystem {
 	return &fileSystem{}
 }
 
-func TestReadCompleteFileFromDisk(t *testing.T) {
+func TestFullCircle(t *testing.T) {
 	f := NewTestFileSystem()
-	bytes, err := f.ReadCompleteFileFromDisk("./testutils/testFile.md")
+	// bytes, err := f.ReadCompleteFileFromDisk("./testutils/testFile.md")
 
+	err := f.WriteCompleteFileToDisk("./test.md", []byte("ThisIsTestDataBeingWritten"), 0644)
 	assert.Nil(t, err)
-	assert.Equal(t, "# Primary Heading\nThis is a primary heading\n\n## Seconday Heading\nThis is a secondary heading", string(bytes[:]))
+
+	bytes, err := f.ReadCompleteFileFromDisk("./test.md")
+	assert.Nil(t, err)
+	assert.Equal(t, "ThisIsTestDataBeingWritten", string(bytes))
+
+	err = f.DeleteFileFromDisk("./test.md")
+	assert.Nil(t, err)
+
+	bytes, err = f.ReadCompleteFileFromDisk("./test.md")
+	assert.Equal(t, "open ./test.md: no such file or directory", err.Error())
 }
