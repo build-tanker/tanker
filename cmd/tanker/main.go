@@ -22,8 +22,8 @@ func main() {
 	logger.Infoln("Starting tanker")
 
 	app := cli.NewApp()
-	app.Name = config.Name()
-	app.Version = config.Version()
+	app.Name = "tanker"
+	app.Version = "0.0.1"
 	app.Usage = "this service saves files and makes them available for distribution"
 
 	app.Commands = []cli.Command{
