@@ -14,7 +14,7 @@ import (
 
 func main() {
 	config := config.NewConfig([]string{".", "..", "../.."})
-	logger := logger.NewLogger(config)
+	logger := logger.NewLogger(config, os.Stdout)
 	ctx := appcontext.NewAppContext(config, logger)
 	db := postgres.NewPostgres(logger, config.Database().ConnectionURL(), config.Database().MaxPoolSize())
 	server := server.NewServer(ctx, db)

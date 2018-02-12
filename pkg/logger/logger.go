@@ -1,29 +1,56 @@
 package logger
 
 import (
+	"io"
 	"log"
-	"os"
 
 	"github.com/sirupsen/logrus"
 	"github.com/sudhanshuraheja/tanker/pkg/config"
 )
 
-type Logger struct {
-	*logrus.Logger
+// Logger - inteface for logrus
+type Logger interface {
+	Fatalln(args ...interface{})
+	Errorln(args ...interface{})
+	Debugln(args ...interface{})
+	Infoln(args ...interface{})
 }
 
-func NewLogger(config *config.Config) Logger {
-	level, err := logrus.ParseLevel(config.LogLevel())
+type logger struct {
+	l *logrus.Logger
+}
+
+// NewLogger - create a new logrus logger
+func NewLogger(config *config.Config, w io.Writer) Logger {
+	level, err := logrus.ParseLevel("debug")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
 
-	return Logger{
-		&logrus.Logger{
-			Out:       os.Stdout,
-			Hooks:     make(logrus.LevelHooks),
-			Level:     level,
-			Formatter: &logrus.JSONFormatter{},
-		},
+	l := &logrus.Logger{
+		Out:       w,
+		Hooks:     make(logrus.LevelHooks),
+		Level:     level,
+		Formatter: &logrus.TextFormatter{},
 	}
+
+	return &logger{
+		l: l,
+	}
+}
+
+func (l *logger) Fatalln(args ...interface{}) {
+	l.l.Fatalln(args...)
+}
+
+func (l *logger) Errorln(args ...interface{}) {
+	l.l.Errorln(args...)
+}
+
+func (l *logger) Debugln(args ...interface{}) {
+	l.l.Debugln(args...)
+}
+
+func (l *logger) Infoln(args ...interface{}) {
+	l.l.Infoln(args...)
 }

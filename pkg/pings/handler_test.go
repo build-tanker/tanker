@@ -3,6 +3,7 @@ package pings
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -35,7 +36,7 @@ func TestPingHandler(t *testing.T) {
 func NewPingHandlerTestContext() *appcontext.AppContext {
 	if pingHandlerTestContext == nil {
 		conf := config.NewConfig([]string{".", "..", "../.."})
-		log := logger.NewLogger(conf)
+		log := logger.NewLogger(conf, os.Stdout)
 		pingHandlerTestContext = appcontext.NewAppContext(conf, log)
 	}
 	return pingHandlerTestContext
