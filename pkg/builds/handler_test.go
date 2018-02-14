@@ -17,7 +17,8 @@ func NewMockService() Service {
 }
 
 func (m MockService) Add(accessKey string, bundle string) (string, error) {
-	return "https://mockBucket.storage.googleapis.com/mockFile", nil
+	return "https://storage.googleapis.com/testBucket/206329dc-a2af-42a4-9977-13990d0c25dc?Expires=1518408172&GoogleAccessId=tanker-gcs-upload-test%40tanker-194004&Signature=OuaiGWj%2BHxJp0LOlu67SwLz1pbwLHrlNlSugrqgLD%2Fv6", nil
+
 }
 
 func NewTestHandler() *handler {
@@ -47,5 +48,5 @@ func TestHandlerAdd(t *testing.T) {
 	var r map[string]interface{}
 	json.Unmarshal(response.Body.Bytes(), &r)
 	assert.Equal(t, "true", r["success"].(string))
-	assert.Equal(t, "https://mockBucket.storage.googleapis.com/mockFile", r["data"].(map[string]interface{})["url"].(string))
+	assert.Equal(t, "https://storage.googleapis.com/testBucket/206329dc-a2af-42a4-9977-13990d0c25dc?Expires=1518408172&GoogleAccessId=tanker-gcs-upload-test%40tanker-194004&Signature=OuaiGWj%2BHxJp0LOlu67SwLz1pbwLHrlNlSugrqgLD%2Fv6", r["data"].(map[string]interface{})["url"].(string))
 }
