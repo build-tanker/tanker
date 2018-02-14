@@ -8,7 +8,7 @@ import (
 
 	"database/sql"
 
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
+	"github.com/gojektech/tanker/pkg/appcontext"
 )
 
 const migrationsPath = "file://./pkg/postgres/migrations"

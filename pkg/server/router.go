@@ -3,14 +3,14 @@ package server
 import (
 	"net/http"
 
-	"github.com/sudhanshuraheja/tanker/pkg/builds"
+	"github.com/gojektech/tanker/pkg/builds"
 
 	"github.com/jmoiron/sqlx"
 
+	"github.com/gojektech/tanker/pkg/appcontext"
+	"github.com/gojektech/tanker/pkg/pings"
+	"github.com/gojektech/tanker/pkg/shippers"
 	"github.com/gorilla/mux"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
-	"github.com/sudhanshuraheja/tanker/pkg/pings"
-	"github.com/sudhanshuraheja/tanker/pkg/shippers"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)

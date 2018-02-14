@@ -1,8 +1,8 @@
 package shippers
 
 import (
+	"github.com/gojektech/tanker/pkg/appcontext"
 	"github.com/jmoiron/sqlx"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
 type Service interface {

@@ -5,9 +5,9 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
+	"github.com/gojektech/tanker/pkg/appcontext"
+	"github.com/gojektech/tanker/pkg/responses"
 	"github.com/gorilla/mux"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
-	"github.com/sudhanshuraheja/tanker/pkg/responses"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)

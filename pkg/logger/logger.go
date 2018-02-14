@@ -4,8 +4,8 @@ import (
 	"io"
 	"log"
 
+	"github.com/gojektech/tanker/pkg/config"
 	"github.com/sirupsen/logrus"
-	"github.com/sudhanshuraheja/tanker/pkg/config"
 )
 
 // Logger - inteface for logrus

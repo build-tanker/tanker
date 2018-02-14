@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gojektech/tanker/pkg/filesystem"
 	"github.com/stretchr/testify/assert"
-	"github.com/sudhanshuraheja/tanker/pkg/filesystem"
 )
 
 type MockGoogleCloudStorage struct{}

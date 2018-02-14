@@ -3,9 +3,9 @@ package postgres
 import (
 	"time"
 
+	"github.com/gojektech/tanker/pkg/logger"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" // postgres driver
-	"github.com/sudhanshuraheja/tanker/pkg/logger"
 )
 
 const connMaxLifetime = 30 * time.Minute

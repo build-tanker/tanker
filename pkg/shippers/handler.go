@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gojektech/tanker/pkg/responses"
 	"github.com/gorilla/mux"
-	"github.com/sudhanshuraheja/tanker/pkg/responses"
 
+	"github.com/gojektech/tanker/pkg/appcontext"
 	"github.com/jmoiron/sqlx"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)

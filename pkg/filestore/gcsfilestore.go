@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gojektech/tanker/pkg/appcontext"
+	"github.com/gojektech/tanker/pkg/filesystem"
 	uuid "github.com/satori/go.uuid"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
-	"github.com/sudhanshuraheja/tanker/pkg/filesystem"
 )
 
 type GoogleCloudStorageFileStore interface {

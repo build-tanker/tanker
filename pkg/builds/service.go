@@ -1,9 +1,9 @@
 package builds
 
 import (
+	"github.com/gojektech/tanker/pkg/appcontext"
+	"github.com/gojektech/tanker/pkg/filestore"
 	"github.com/jmoiron/sqlx"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
-	"github.com/sudhanshuraheja/tanker/pkg/filestore"
 )
 
 type Service interface {

@@ -3,8 +3,8 @@ package pings
 import (
 	"net/http"
 
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
-	"github.com/sudhanshuraheja/tanker/pkg/responses"
+	"github.com/gojektech/tanker/pkg/appcontext"
+	"github.com/gojektech/tanker/pkg/responses"
 )
 
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)

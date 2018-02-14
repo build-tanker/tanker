@@ -6,11 +6,11 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
+	"github.com/gojektech/tanker/pkg/appcontext"
+	"github.com/gojektech/tanker/pkg/config"
+	"github.com/gojektech/tanker/pkg/logger"
+	"github.com/gojektech/tanker/pkg/postgresmock"
 	"github.com/stretchr/testify/assert"
-	"github.com/sudhanshuraheja/tanker/pkg/appcontext"
-	"github.com/sudhanshuraheja/tanker/pkg/config"
-	"github.com/sudhanshuraheja/tanker/pkg/logger"
-	"github.com/sudhanshuraheja/tanker/pkg/postgresmock"
 )
 
 var testContext *appcontext.AppContext

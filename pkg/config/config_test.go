@@ -3,8 +3,8 @@ package config_test
 import (
 	"testing"
 
+	"github.com/gojektech/tanker/pkg/config"
 	"github.com/stretchr/testify/assert"
-	"github.com/sudhanshuraheja/tanker/pkg/config"
 )
 
 func TestConfigValues(t *testing.T) {
