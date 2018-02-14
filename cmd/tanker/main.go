@@ -5,11 +5,11 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/gojektech/tanker/pkg/appcontext"
-	"github.com/gojektech/tanker/pkg/config"
-	"github.com/gojektech/tanker/pkg/logger"
-	"github.com/gojektech/tanker/pkg/postgres"
-	"github.com/gojektech/tanker/pkg/server"
+	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/gojekfarm/tanker/pkg/config"
+	"github.com/gojekfarm/tanker/pkg/logger"
+	"github.com/gojekfarm/tanker/pkg/postgres"
+	"github.com/gojekfarm/tanker/pkg/server"
 )
 
 func main() {

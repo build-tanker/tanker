@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gojektech/tanker/pkg/appcontext"
-	"github.com/gojektech/tanker/pkg/filesystem"
+	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/gojekfarm/tanker/pkg/filesystem"
 	uuid "github.com/satori/go.uuid"
 )
 

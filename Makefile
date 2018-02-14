@@ -105,7 +105,7 @@ build_fresh: clean init update fmt vet lint copy-config coverage compile install
 
 build_docker:
 	@echo "$(GREEN_COLOR)Building a docker image $(END_COLOR)"
-	docker build -t gojektech/tanker .
+	docker build -t gojekfarm/tanker .
 
 #
 # Recipes for starting new projects

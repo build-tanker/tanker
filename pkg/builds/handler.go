@@ -5,8 +5,8 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/gojektech/tanker/pkg/appcontext"
-	"github.com/gojektech/tanker/pkg/responses"
+	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/gojekfarm/tanker/pkg/responses"
 	"github.com/gorilla/mux"
 )
 

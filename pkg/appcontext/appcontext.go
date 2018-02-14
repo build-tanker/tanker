@@ -1,8 +1,8 @@
 package appcontext
 
 import (
-	"github.com/gojektech/tanker/pkg/config"
-	"github.com/gojektech/tanker/pkg/logger"
+	"github.com/gojekfarm/tanker/pkg/config"
+	"github.com/gojekfarm/tanker/pkg/logger"
 )
 
 // AppContext - global context for config and logging

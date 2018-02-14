@@ -3,9 +3,9 @@ package filestore
 import (
 	"os"
 
-	"github.com/gojektech/tanker/pkg/appcontext"
-	"github.com/gojektech/tanker/pkg/config"
-	"github.com/gojektech/tanker/pkg/logger"
+	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/gojekfarm/tanker/pkg/config"
+	"github.com/gojekfarm/tanker/pkg/logger"
 )
 
 var testContext *appcontext.AppContext

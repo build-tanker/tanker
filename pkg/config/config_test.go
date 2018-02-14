@@ -3,7 +3,7 @@ package config_test
 import (
 	"testing"
 
-	"github.com/gojektech/tanker/pkg/config"
+	"github.com/gojekfarm/tanker/pkg/config"
 	"github.com/stretchr/testify/assert"
 )
 
