@@ -4,6 +4,9 @@ Tanker is an Open source, Self Hosted, Mobile Releases Deployment tool for iOS a
 
 *WIP : We are not ready for production yet. You can sign up for our [newsletter here](https://goo.gl/forms/Ck0lnzdWQNyfD5Il2), we will reach out to you as soon as we are ready.*
 
+[![Build Status](https://travis-ci.org/gojekfarm/tanker.svg?branch=master)](https://travis-ci.org/gojekfarm/tanker)
+[![codecov](https://codecov.io/gh/gojekfarm/tanker/branch/master/graph/badge.svg)](https://codecov.io/gh/gojekfarm/tanker)
+
 ## Getting Started
 
 Tanker consists of two different components.
