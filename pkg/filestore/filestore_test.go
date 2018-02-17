@@ -11,8 +11,9 @@ import (
 var testContext *appcontext.AppContext
 
 func NewTestContext() *appcontext.AppContext {
+
 	if testContext == nil {
-		conf := config.NewConfig([]string{".", "..", "../.."})
+		conf := config.NewConfig([]string{".", "../config/testutil"})
 		log := logger.NewLogger(conf, os.Stdout)
 		testContext = appcontext.NewAppContext(conf, log)
 	}

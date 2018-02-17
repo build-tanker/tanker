@@ -64,5 +64,5 @@ func TestWriteURL(t *testing.T) {
 	final, err := g.GetWriteURL()
 	assert.Nil(t, err)
 	assert.Equal(t, "https://accounts.google.com/o/oauth2/auth", g.creds.AuthURI)
-	assert.Equal(t, "https://storage.googleapis.com/testBucket/cat.jpeg", final)
+	assert.Equal(t, "https://storage.googleapis.com/shrieking-cat/cat.jpeg", final)
 }
