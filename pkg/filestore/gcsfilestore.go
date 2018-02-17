@@ -47,11 +47,16 @@ func NewGoogleCloudStorageFileStore(ctx *appcontext.AppContext) FileStore {
 }
 
 func (g *googleCloudStorageFileStore) GetWriteURL() (string, error) {
-	bucket := "testBucket"
+	bucket := g.ctx.GetConfig().GCSBucket()
+
+	if bucket == "" {
+		return "", errors.New("Please define a bucket to upload to")
+	}
 
 	duration := 60 * time.Minute
 	expiration := time.Now().Add(duration)
 	key := uuid.NewV4().String()
+	// key := fmt.Sprintf("%s.%s", uuid.NewV4().String(), "pdf")
 
 	signed, err := g.gcs.SignedURL(bucket, key, g.creds.ClientEmail, []byte(g.creds.PrivateKey), http.MethodPut, expiration)
 	if err != nil {
