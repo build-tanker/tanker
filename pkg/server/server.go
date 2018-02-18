@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 
@@ -14,8 +15,9 @@ import (
 )
 
 type Server struct {
-	ctx *appcontext.AppContext
-	db  *sqlx.DB
+	ctx    *appcontext.AppContext
+	db     *sqlx.DB
+	server *http.Server
 }
 
 func NewServer(ctx *appcontext.AppContext, db *sqlx.DB) *Server {
@@ -27,7 +29,7 @@ func NewServer(ctx *appcontext.AppContext, db *sqlx.DB) *Server {
 
 func (s *Server) Start() error {
 	config := s.ctx.GetConfig()
-	logger := s.ctx.GetLogger()
+	log := s.ctx.GetLogger()
 
 	server := negroni.New()
 	server.Use(negroni.NewRecovery())
@@ -51,14 +53,33 @@ func (s *Server) Start() error {
 
 	server.Use(Recover())
 	server.UseHandler(router)
-	logger.Infoln("Starting the server at", serverURL)
 	server.Run(serverURL)
+
+	s.server = &http.Server{
+		Addr:         serverURL,
+		ReadTimeout:  3 * time.Second,
+		WriteTimeout: 3 * time.Second,
+		Handler:      server,
+	}
+
+	log.Infoln("[negroni] Listening on ", serverURL)
+	go func() {
+		err := s.server.ListenAndServe()
+		if err != nil {
+			if err.Error() != "http: Server closed" {
+				fmt.Println("Server: the server is not running anymore,", err.Error())
+			}
+		}
+	}()
+
+	http.ListenAndServe(serverURL, server)
 
 	return nil
 }
 
 func (s *Server) Stop() error {
 	// Not sure how to stop a server
+	s.server.Shutdown(nil)
 	return nil
 }
 
