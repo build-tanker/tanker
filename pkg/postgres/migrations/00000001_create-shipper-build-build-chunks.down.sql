@@ -1,2 +1,6 @@
-DROP TABLE shippers;
-DROP TABLE builds;
+DROP TABLE person;
+DROP TABLE app_group;
+DROP TABLE app;
+DROP TABLE access;
+DROP TABLE shipper;
+DROP TABLE build;
