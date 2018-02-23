@@ -76,7 +76,11 @@ func (m *MockServer) get() HTTPHandler {
 
 func (m *MockServer) post() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		m.writeJSON(w, http.StatusOK, `{ "data": { "method": "post" }, "success": "true" }`)
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, err.Error(), 500)
+		}
+		m.writeJSON(w, http.StatusOK, fmt.Sprintf(`{ "data": { "method": "post", "name": "%s" }, "success": "true" }`, r.FormValue("name")))
+
 	}
 }
 

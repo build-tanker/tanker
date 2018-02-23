@@ -1,6 +1,8 @@
 package requester
 
 import (
+	"net/url"
+	"strings"
 	"testing"
 	"time"
 
@@ -21,9 +23,16 @@ func TestRequester(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, `{ "data": { "method": "get" }, "success": "true" }`, string(bytes))
 
-	bytes, err = r.Post("http://localhost:9000/post")
+	bytes, err = r.Post("http://localhost:9000/post", nil)
 	assert.Nil(t, err)
-	assert.Equal(t, `{ "data": { "method": "post" }, "success": "true" }`, string(bytes))
+	assert.Equal(t, `{ "data": { "method": "post", "name": "" }, "success": "true" }`, string(bytes))
+
+	v := url.Values{}
+	v.Set("name", "value")
+	s := v.Encode()
+	bytes, err = r.Post("http://localhost:9000/post", strings.NewReader(s))
+	assert.Nil(t, err)
+	assert.Equal(t, `{ "data": { "method": "post", "name": "value" }, "success": "true" }`, string(bytes))
 
 	bytes, err = r.Put("http://localhost:9000/put")
 	assert.Nil(t, err)

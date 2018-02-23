@@ -13,7 +13,7 @@ import (
 // Requester - inteface to http.client
 type Requester interface {
 	Get(url string) ([]byte, error)
-	Post(url string) ([]byte, error)
+	Post(url string, body io.Reader) ([]byte, error)
 	Put(url string) ([]byte, error)
 	Delete(url string) ([]byte, error)
 	Upload(url string, file string) ([]byte, error)
@@ -34,28 +34,28 @@ func NewRequester(timeout time.Duration) Requester {
 }
 
 func (r *requester) Get(url string) ([]byte, error) {
-	return r.call(http.MethodGet, url, "")
+	return r.call(http.MethodGet, url, "", nil)
 }
 
-func (r *requester) Post(url string) ([]byte, error) {
+func (r *requester) Post(url string, body io.Reader) ([]byte, error) {
 	// #TODO add body for post
-	return r.call(http.MethodPost, url, "")
+	return r.call(http.MethodPost, url, "", body)
 }
 
 func (r *requester) Put(url string) ([]byte, error) {
 	// #TODO add body for put
-	return r.call(http.MethodPut, url, "")
+	return r.call(http.MethodPut, url, "", nil)
 }
 
 func (r *requester) Delete(url string) ([]byte, error) {
-	return r.call(http.MethodDelete, url, "")
+	return r.call(http.MethodDelete, url, "", nil)
 }
 
 func (r *requester) Upload(url string, file string) ([]byte, error) {
-	return r.call(http.MethodPut, url, file)
+	return r.call(http.MethodPut, url, file, nil)
 }
 
-func (r *requester) call(method string, url string, filePath string) ([]byte, error) {
+func (r *requester) call(method string, url string, filePath string, body io.Reader) ([]byte, error) {
 
 	var request *http.Request
 	var err error
@@ -80,6 +80,9 @@ func (r *requester) call(method string, url string, filePath string) ([]byte, er
 		}()
 
 		request, err = http.NewRequest(method, url, pr)
+	} else if body != nil {
+		request, err = http.NewRequest(method, url, body)
+		request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	} else {
 		request, err = http.NewRequest(method, url, nil)
 	}
