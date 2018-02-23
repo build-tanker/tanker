@@ -46,3 +46,12 @@ func TestGetAuthURL(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "https://accounts.google.com/o/oauth2/v2/auth?scope=fakeScope&access_type=offline&include_granted_scopes=true&state=fakeState&redirect_uri=fakeRedirectURL&response_type=code&login_hint=fakeLoginHint&prompt=consent%20select_account&client_id=fakeClientID", url)
 }
+
+func TestGetToken(t *testing.T) {
+	oa, err := NewOAuth2("fakeClientID", "fakeClientSecret", "fakeRedirectURL")
+	assert.Nil(t, err)
+
+	bytes, err := oa.GetToken("abc")
+	assert.Nil(t, err)
+	assert.Equal(t, "{\n \"error\": \"invalid_client\",\n \"error_description\": \"The OAuth client was not found.\"\n}\n", string(bytes))
+}
