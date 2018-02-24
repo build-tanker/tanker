@@ -24,7 +24,7 @@ func TestGetAuthURL(t *testing.T) {
 	// Try with no scope
 	url, err = oa.GetAuthURL("", "fakeAccessType", "fakeState", "fakeIncludeGrantedScopes", "fakeLoginHint", "fakePrompt")
 	assert.Nil(t, err)
-	assert.Equal(t, "https://accounts.google.com/o/oauth2/v2/auth?scope=profile%20email%20https:%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https:%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&access_type=offline&include_granted_scopes=true&state=fakeState&redirect_uri=fakeRedirectURL&response_type=code&login_hint=fakeLoginHint&prompt=fakePrompt&client_id=fakeClientID", url)
+	assert.Equal(t, "https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile%20https:%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https:%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&access_type=offline&include_granted_scopes=true&state=fakeState&redirect_uri=fakeRedirectURL&response_type=code&login_hint=fakeLoginHint&prompt=fakePrompt&client_id=fakeClientID", url)
 
 	// Try with no include_granted_scopes
 	url, err = oa.GetAuthURL("fakeScope", "fakeAccessType", "fakeState", "", "fakeLoginHint", "fakePrompt")
