@@ -11,6 +11,21 @@ import (
 )
 
 // More details here - https://developers.google.com/identity/protocols/OAuth2WebServer#protectauthcode
+// And here https://developers.google.com/identity/protocols/OAuth2UserAgent#validate-access-token
+
+const (
+	scopeEmail           = "email"
+	scopeProfile         = "profile"
+	scopeUserInfoEmail   = "https://www.googleapis.com/auth/userinfo.email"
+	scopeUserInfoProfile = "https://www.googleapis.com/auth/userinfo.profile"
+	accessTypeOnline     = "online"
+	accessTypeOffline    = "offline"
+	promptConsent        = "consent"
+	promptSelectAccount  = "select_account"
+	authTokenURL         = "https://accounts.google.com/o/oauth2/v2/auth?scope=%s&access_type=%s&include_granted_scopes=%s&state=%s&redirect_uri=%s&response_type=code&login_hint=%s&prompt=%s&client_id=%s"
+	getTokenURL          = "https://www.googleapis.com/oauth2/v4/token"
+	verifyTokenURL       = "https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=%s"
+)
 
 // OAuth2 interface to deal with OAuth2
 type OAuth2 interface {
@@ -52,26 +67,25 @@ func NewOAuth2(clientID, clientSecret, redirectURL string) (OAuth2, error) {
 func (o oAuth2) GetAuthURL(scope, accessType, state, includeGrantedScopes, loginHint, prompt string) (string, error) {
 
 	if scope == "" {
-		scope = "profile email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+		scope = fmt.Sprintf("%s %s %s %s", scopeEmail, scopeProfile, scopeUserInfoEmail, scopeUserInfoProfile)
 	}
 
 	if includeGrantedScopes != "true" {
 		includeGrantedScopes = "true"
 	}
 
-	if accessType != "online" {
-		accessType = "offline"
+	if accessType != accessTypeOnline {
+		accessType = accessTypeOffline
 	}
 
 	if prompt == "" {
-		prompt = "consent select_account"
+		prompt = fmt.Sprintf("%s %s", promptConsent, promptSelectAccount)
 	}
 
-	return fmt.Sprintf("https://accounts.google.com/o/oauth2/v2/auth?scope=%s&access_type=%s&include_granted_scopes=%s&state=%s&redirect_uri=%s&response_type=code&login_hint=%s&prompt=%s&client_id=%s", url.PathEscape(scope), url.PathEscape(accessType), url.PathEscape(includeGrantedScopes), url.PathEscape(state), url.PathEscape(o.redirectURL), url.PathEscape(loginHint), url.PathEscape(prompt), url.PathEscape(o.clientID)), nil
+	return fmt.Sprintf(authTokenURL, url.PathEscape(scope), url.PathEscape(accessType), url.PathEscape(includeGrantedScopes), url.PathEscape(state), url.PathEscape(o.redirectURL), url.PathEscape(loginHint), url.PathEscape(prompt), url.PathEscape(o.clientID)), nil
 }
 
 func (o oAuth2) GetToken(code string) ([]byte, error) {
-	tokenURL := "https://www.googleapis.com/oauth2/v4/token"
 
 	v := url.Values{}
 	v.Set("code", code)
@@ -81,7 +95,7 @@ func (o oAuth2) GetToken(code string) ([]byte, error) {
 	v.Set("grant_type", "authorization_code")
 	s := v.Encode()
 
-	body, err := o.r.Post(tokenURL, strings.NewReader(s))
+	body, err := o.r.Post(getTokenURL, strings.NewReader(s))
 	if err != nil {
 		return []byte{}, err
 	}
