@@ -14,9 +14,10 @@ CREATE TABLE token (
   person UUID NOT NULL REFERENCES person(id),
   source VARCHAR(128),
   access_token VARCHAR(256),
-  refresh_token VARCHAR(256),
-  expires_in INT,
-  token_type VARCHAR(128),
+  external_access_token VARCHAR(256),
+  external_refresh_token VARCHAR(256),
+  external_expires_in INT,
+  external_token_type VARCHAR(128),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
