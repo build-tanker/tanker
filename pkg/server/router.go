@@ -10,8 +10,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type HTTPHandler func(w http.ResponseWriter, r *http.Request)
+type httpHandler func(w http.ResponseWriter, r *http.Request)
 
+// Router declares the interface to route requests
 func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 
 	pingHandler := pings.PingHandler{}
@@ -47,7 +48,7 @@ func Router(ctx *appcontext.AppContext, db *sqlx.DB) http.Handler {
 	return router
 }
 
-func FakeHandler(ctx *appcontext.AppContext, db *sqlx.DB) HTTPHandler {
+func fakeHandler(ctx *appcontext.AppContext, db *sqlx.DB) httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

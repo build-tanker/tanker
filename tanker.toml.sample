@@ -1,11 +1,7 @@
 [application]
-fileStore = "googlecloud"
 
 [server]
 port = "3000"
-enableStaticFileServer = false
-enableGzipCompression = true
-enableDelayMiddleware = false
 
 [database]
 name = "tanker"
@@ -14,7 +10,3 @@ password = "tanker"
 host = "localhost"
 port = 5432
 maxPoolSize = 10
-
-[googlecloud]
-jsonConfig = "/Users/sudhanshu/private/flying-monkey-club-1483.json"
-bucket = "shrieking-cat"

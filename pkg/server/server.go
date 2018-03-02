@@ -6,20 +6,19 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-
-	"github.com/jeffbmartinez/delay"
-	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urfave/negroni"
 
 	"github.com/build-tanker/tanker/pkg/appcontext"
 )
 
+// Server provides a way to interact with the server
 type Server struct {
 	ctx    *appcontext.AppContext
 	db     *sqlx.DB
 	server *http.Server
 }
 
+// NewServer makes a new server object available
 func NewServer(ctx *appcontext.AppContext, db *sqlx.DB) *Server {
 	return &Server{
 		ctx: ctx,
@@ -27,6 +26,7 @@ func NewServer(ctx *appcontext.AppContext, db *sqlx.DB) *Server {
 	}
 }
 
+// Start a server
 func (s *Server) Start() error {
 	config := s.ctx.GetConfig()
 	log := s.ctx.GetLogger()
@@ -36,22 +36,9 @@ func (s *Server) Start() error {
 	server.Use(negroni.NewLogger())
 
 	router := Router(s.ctx, s.db)
-
-	if config.EnableDelayMiddleware() {
-		server.Use(delay.Middleware{})
-	}
-
-	if config.EnableGzipCompression() {
-		server.Use(gzip.Gzip(gzip.DefaultCompression))
-	}
-
-	if config.EnableStaticFileServer() {
-		server.Use(negroni.NewStatic(http.Dir("data")))
-	}
-
 	serverURL := fmt.Sprintf(":%s", config.Port())
 
-	server.Use(Recover())
+	server.Use(recover())
 	server.UseHandler(router)
 	server.Run(serverURL)
 
@@ -77,13 +64,13 @@ func (s *Server) Start() error {
 	return nil
 }
 
+// Stop a server
 func (s *Server) Stop() error {
-	// Not sure how to stop a server
 	s.server.Shutdown(nil)
 	return nil
 }
 
-func Recover() negroni.HandlerFunc {
+func recover() negroni.HandlerFunc {
 	return negroni.HandlerFunc(func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		defer func() {
 			if err := recover(); err != nil {
