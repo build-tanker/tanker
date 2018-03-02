@@ -35,6 +35,7 @@ clean:
 	rm -rf tanker.toml
 	rm -rf coverage.txt
 	rm -rf coverage.html
+	rm -rf coverage.tmp
 	rm -rf bin/
 
 ### Initialisation project for the first time

@@ -6,6 +6,7 @@ import (
 	"cloud.google.com/go/storage"
 )
 
+// GoogleCloudStorage - interface to GCS
 type GoogleCloudStorage interface {
 	SignedURL(bucket, name, googleAccessID string, privateKey []byte, method string, expiration time.Time) (string, error)
 }
@@ -13,6 +14,7 @@ type GoogleCloudStorage interface {
 type googleCloudStorage struct {
 }
 
+// NewGoogleCloudStorage - initialise a new GCS
 func NewGoogleCloudStorage() GoogleCloudStorage {
 	return googleCloudStorage{}
 }

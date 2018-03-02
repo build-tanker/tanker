@@ -6,7 +6,7 @@ services:
     image: postgres:10.1-alpine
     # Don't load up older data, start fresh
     volumes:
-      - ./pgdata:/pgdata
+      - ./external/pgdata:/pgdata
     # Export this on the usual port
     ports:
       - "5432:5432"
@@ -23,7 +23,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redisdata:/var/lib/redis
+      - ./external/redisdata:/var/lib/redis
   # Setup Rabbitmq
   rabbitmq:
     image: "rabbitmq:3.7.2-alpine"
@@ -39,7 +39,7 @@ services:
     labels:
       NAME: "rabbitmq"
     volumes:
-      - ./rabbitmq:/data/mnesia
+      - ./external/rabbitmq:/data/mnesia
       #- "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
       #- "./rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro"
       #- "./autocluster-0.4.1.ez:/usr/lib/rabbitmq/lib/rabbitmq_server-3.5.5/plugins/autocluster-0.4.1.ez"

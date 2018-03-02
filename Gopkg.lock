@@ -21,6 +21,12 @@
   version = "v1.3.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/build-tanker/disk"
+  packages = ["."]
+  revision = "aaa6ce752171999225151b4273614041f75a6831"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -352,6 +358,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "82a7e775756f7b55a981559e2f7f48ba99f015aab885b54516e155e77704315a"
+  inputs-digest = "8dc2fecd76d5ab964915bba5fcbed67b12380caf3a3f4e88248fd01b956a4035"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/build-tanker/tanker/pkg/filesystem"
+	"github.com/build-tanker/disk"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,38 +22,38 @@ func (m MockGoogleCloudStorage) SignedURL(bucket, name, googleAccessID string, p
 
 type MockFS struct{}
 
-func NewMockFS() filesystem.FileSystem {
+func NewMockFS() disk.Disk {
 	return MockFS{}
 }
 
-func (m MockFS) ReadCompleteFileFromDisk(path string) ([]byte, error) {
+func (m MockFS) ReadCompleteFile(path string) ([]byte, error) {
 	sampleFile := `{ "type": "service_account", "project_id": "sample-123456", "private_key_id": "1234ab5def", "private_key": "-----BEGIN PRIVATE KEY-----\n-----END PRIVATE KEY-----\n", "client_email": "sample-gcs-upload@sample-123456.iam.gserviceaccount.com", "client_id": "1234567890", "auth_uri": "https://accounts.google.com/o/oauth2/auth", "token_uri": "https://accounts.google.com/o/oauth2/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sample-gcs-upload%40sample-123456.iam.gserviceaccount.com" }`
 
 	return []byte(sampleFile), nil
 }
 
-func (m MockFS) WriteCompleteFileToDisk(path string, data []byte, permissions os.FileMode) error {
+func (m MockFS) WriteCompleteFile(path string, data []byte, permissions os.FileMode) error {
 	return nil
 }
 
-func (m MockFS) DeleteFileFromDisk(path string) error {
+func (m MockFS) DeleteFile(path string) error {
 	return nil
 }
 
-func NewTestGoogleCloudStorageFileStore() *googleCloudStorageFileStore {
+func newTestGoogleCloudStorageFileStore() *googleCloudStorageFileStore {
 	ctx := NewTestContext()
-	fs := NewMockFS()
+	dd := NewMockFS()
 	gcs := NewMockGoogleCloudStorage()
 	return &googleCloudStorageFileStore{
 		ctx:   ctx,
 		creds: &googleCredentials{},
-		fs:    fs,
+		dd:    dd,
 		gcs:   gcs,
 	}
 }
 
 func TestWriteURL(t *testing.T) {
-	g := NewTestGoogleCloudStorageFileStore()
+	g := newTestGoogleCloudStorageFileStore()
 
 	err := g.Setup()
 	if err != nil {
