@@ -4,7 +4,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/gojekfarm/tanker/pkg/config"
+	"github.com/build-tanker/tanker/pkg/config"
 	"github.com/sirupsen/logrus"
 )
 

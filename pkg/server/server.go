@@ -11,7 +11,7 @@ import (
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urfave/negroni"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/appcontext"
 )
 
 type Server struct {

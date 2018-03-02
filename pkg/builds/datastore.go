@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/appcontext"
 	"github.com/jmoiron/sqlx"
 )
 

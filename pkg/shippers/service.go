@@ -1,7 +1,7 @@
 package shippers
 
 import (
-	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/appcontext"
 	"github.com/jmoiron/sqlx"
 )
 

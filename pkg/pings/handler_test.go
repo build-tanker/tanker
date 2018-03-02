@@ -8,9 +8,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
-	"github.com/gojekfarm/tanker/pkg/config"
-	"github.com/gojekfarm/tanker/pkg/logger"
+	"github.com/build-tanker/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/config"
+	"github.com/build-tanker/tanker/pkg/logger"
 )
 
 var pingHandlerTestContext *appcontext.AppContext

@@ -10,11 +10,11 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
-	"github.com/gojekfarm/tanker/pkg/config"
-	"github.com/gojekfarm/tanker/pkg/logger"
-	"github.com/gojekfarm/tanker/pkg/postgres"
-	"github.com/gojekfarm/tanker/pkg/postgresmock"
+	"github.com/build-tanker/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/config"
+	"github.com/build-tanker/tanker/pkg/logger"
+	"github.com/build-tanker/tanker/pkg/postgres"
+	"github.com/build-tanker/tanker/pkg/postgresmock"
 )
 
 var testContext *appcontext.AppContext

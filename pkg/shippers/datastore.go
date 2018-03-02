@@ -7,8 +7,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/satori/go.uuid"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
-	"github.com/gojekfarm/tanker/pkg/logger"
+	"github.com/build-tanker/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/logger"
 )
 
 type Shipper struct {

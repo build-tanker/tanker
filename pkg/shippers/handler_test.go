@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/appcontext"
 )
 
 type MockService struct {

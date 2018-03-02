@@ -197,18 +197,6 @@
   version = "v1.2.0"
 
 [[projects]]
-  name = "github.com/tidwall/gjson"
-  packages = ["."]
-  revision = "87033efcaec6215741137e8ca61952c53ef2685d"
-  version = "v1.0.6"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/tidwall/match"
-  packages = ["."]
-  revision = "1731857f09b1f38450e2c12409748407822dc6be"
-
-[[projects]]
   name = "github.com/urfave/cli"
   packages = ["."]
   revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
@@ -364,6 +352,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "397c74cc7eba043189f471c60bc0df67b51cb02a4de66b4de3ece01a9940bd3c"
+  inputs-digest = "82a7e775756f7b55a981559e2f7f48ba99f015aab885b54516e155e77704315a"
   solver-name = "gps-cdcl"
   solver-version = 1

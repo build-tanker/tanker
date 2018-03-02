@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gojekfarm/tanker/pkg/requester"
+	"github.com/build-tanker/tanker/pkg/requester"
 )
 
 // More details here - https://developers.google.com/identity/protocols/OAuth2WebServer#protectauthcode

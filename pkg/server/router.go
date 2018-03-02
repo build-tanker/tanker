@@ -3,13 +3,13 @@ package server
 import (
 	"net/http"
 
-	"github.com/gojekfarm/tanker/pkg/builds"
+	"github.com/build-tanker/tanker/pkg/builds"
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
-	"github.com/gojekfarm/tanker/pkg/pings"
-	"github.com/gojekfarm/tanker/pkg/shippers"
+	"github.com/build-tanker/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/pings"
+	"github.com/build-tanker/tanker/pkg/shippers"
 	"github.com/gorilla/mux"
 )
 

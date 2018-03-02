@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gojekfarm/tanker/pkg/responses"
+	"github.com/build-tanker/tanker/pkg/responses"
 	"github.com/gorilla/mux"
 
-	"github.com/gojekfarm/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/appcontext"
 	"github.com/jmoiron/sqlx"
 )
 
