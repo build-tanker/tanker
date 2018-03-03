@@ -85,8 +85,9 @@ compile:
 coverage:
 	@echo "$(GREEN_COLOR)Calculating test coverage across packages $(END_COLOR)"
 	@echo 'mode: atomic' > coverage.txt && echo '' > coverage.tmp && go list ./... | xargs -n1 -I{} sh -c 'go test -p=5 -race -covermode=atomic -coverprofile=coverage.tmp -timeout=30s {} && tail -n +2 coverage.tmp >> coverage.txt'
-	@rm coverage.tmp
 	go tool cover -html=coverage.txt -o coverage.html
+	@rm coverage.txt
+	@rm coverage.tmp
 	@echo "$(YELLOW_COLOR)Run open ./coverage.html to view coverage $(END_COLOR)"
 
 ### Install all binaries (Repo could have multiple binaries)
