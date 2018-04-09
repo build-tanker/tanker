@@ -6,12 +6,14 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 
+	"github.com/build-tanker/tanker/pkg/builds"
 	"github.com/build-tanker/tanker/pkg/common/config"
 )
 
 // Handler exposes all handlers
 type Handler struct {
 	health *healthHandler
+	builds *buildHandler
 }
 
 // HTTPHandler is the type which can handle a URL
@@ -20,10 +22,14 @@ type httpHandler func(w http.ResponseWriter, r *http.Request)
 // New creates a new handler
 func New(conf *config.Config, db *sqlx.DB) *Handler {
 
+	// Create services
+	buildService := builds.New(conf, db)
+
 	// Finally, create handlers
 	health := newHealthHandler()
+	builds := newBuildHandler(buildService)
 
-	return &Handler{health}
+	return &Handler{health, builds}
 }
 
 // Route pipes requests to the correct handlers
@@ -32,14 +38,9 @@ func (h *Handler) Route() http.Handler {
 
 	router.HandleFunc("/ping", h.health.ping()).Methods(http.MethodGet)
 
-	// GET___ .../ping
-	// router.HandleFunc("/ping", pingHandler.Ping(ctx)).Methods(http.MethodGet)
+	router.HandleFunc("/v1/builds/new", h.builds.Add()).Methods(http.MethodGet)
 
-	// Auth
-	// POST .../v1/users source=google&access_token=tkn&name=name&email=email&user_id=123
-	// GET .../v1/users/15
-	// PUT .../v1/users/15 access_token=tkn&name=name&deleted=true
-	// DELETE .../v1/users/15
+	return router
 
 	// AppGroup
 	// POST .../v1/appGroup name=name
@@ -59,7 +60,6 @@ func (h *Handler) Route() http.Handler {
 	// PUT ../v1/access/15 access_level=admin
 	// DELETE ../v1/access/15
 
-	return router
 }
 
 func fakeHandler() httpHandler {

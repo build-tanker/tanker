@@ -5,37 +5,34 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// Service - gets the request from the handler, controls how the service responds
-type Service interface {
-	Add(appGroup string, expiry int) (string, error)
-	Delete(id string) error
-	View(id string) (Shipper, error)
-	ViewAll() ([]Shipper, error)
-}
-
-type service struct {
+// Service for shippers
+type Service struct {
 	cnf       *config.Config
 	datastore Datastore
 }
 
-// NewService - initialise a new service
-func NewService(cnf *config.Config, db *sqlx.DB) Service {
+// New - initialise a new shipper service
+func New(cnf *config.Config, db *sqlx.DB) *Service {
 	datastore := NewDatastore(cnf, db)
-	return &service{cnf, datastore}
+	return &Service{cnf, datastore}
 }
 
-func (s *service) Add(appGroup string, expiry int) (string, error) {
+// Add a new shipper
+func (s *Service) Add(appGroup string, expiry int) (string, error) {
 	return s.datastore.Add(appGroup, expiry)
 }
 
-func (s *service) Delete(id string) error {
+// Delete a shipper
+func (s *Service) Delete(id string) error {
 	return s.datastore.Delete(id)
 }
 
-func (s *service) View(id string) (Shipper, error) {
+// View a shipper
+func (s *Service) View(id string) (Shipper, error) {
 	return s.datastore.View(id)
 }
 
-func (s *service) ViewAll() ([]Shipper, error) {
+// ViewAll shippers
+func (s *Service) ViewAll() ([]Shipper, error) {
 	return s.datastore.ViewAll()
 }

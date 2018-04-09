@@ -1,45 +1,26 @@
-package shippers
+package handler
 
 import (
 	"errors"
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
-	"github.com/jmoiron/sqlx"
-
-	"github.com/build-tanker/tanker/pkg/common/config"
 	"github.com/build-tanker/tanker/pkg/common/responses"
+	"github.com/build-tanker/tanker/pkg/shippers"
 )
 
-// HTTPHandler - handler incoming requests
-type HTTPHandler func(w http.ResponseWriter, r *http.Request)
-
-// Handler - handle requests for shippers
-type Handler interface {
-	Add() HTTPHandler
-	ViewAll() HTTPHandler
-	View() HTTPHandler
-	Delete() HTTPHandler
+type shipperHandler struct {
+	service *shippers.Service
 }
 
-type handler struct {
-	cnf     *config.Config
-	service Service
+func newShipperHandler(service *shippers.Service) *shipperHandler {
+	return &shipperHandler{service}
 }
 
-// NewHandler - create a new handler for shippers
-func NewHandler(cnf *config.Config, db *sqlx.DB) Handler {
-	return &handler{
-		cnf:     cnf,
-		service: NewService(cnf, db),
-	}
-}
-
-func (s *handler) Add() HTTPHandler {
+func (s *shipperHandler) Add() httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		appGroup := s.parseKeyFromQuery(r, "appGroup")
-		expiry := s.parseKeyFromQuery(r, "expiry")
+		appGroup := parseKeyFromQuery(r, "appGroup")
+		expiry := parseKeyFromQuery(r, "expiry")
 
 		expiryInt, err := strconv.Atoi(expiry)
 		if err != nil {
@@ -53,7 +34,7 @@ func (s *handler) Add() HTTPHandler {
 		}
 
 		responses.WriteJSON(w, http.StatusOK, &responses.Response{
-			Data: &Shipper{
+			Data: &shippers.Shipper{
 				ID: id,
 			},
 			Success: "true",
@@ -61,21 +42,8 @@ func (s *handler) Add() HTTPHandler {
 	}
 }
 
-func (s *handler) parseKeyFromQuery(r *http.Request, key string) string {
-	value := ""
-	if len(r.URL.Query()[key]) > 0 {
-		value = r.URL.Query()[key][0]
-	}
-	return value
-}
-
-func (s *handler) parseKeyFromVars(r *http.Request, key string) string {
-	vars := mux.Vars(r)
-	return vars[key]
-}
-
 // /v1/shippers?page=1&count=25
-func (s *handler) ViewAll() HTTPHandler {
+func (s *shipperHandler) ViewAll() httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		shippers, err := s.service.ViewAll()
 		if err != nil {
@@ -90,9 +58,9 @@ func (s *handler) ViewAll() HTTPHandler {
 }
 
 // /v1/shippers/id
-func (s *handler) View() HTTPHandler {
+func (s *shipperHandler) View() httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id := s.parseKeyFromVars(r, "id")
+		id := parseKeyFromVars(r, "id")
 
 		shippers, err := s.service.View(id)
 		if err != nil {
@@ -107,9 +75,9 @@ func (s *handler) View() HTTPHandler {
 }
 
 // /v1/shippers/id
-func (s *handler) Delete() HTTPHandler {
+func (s *shipperHandler) Delete() httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id := s.parseKeyFromVars(r, "id")
+		id := parseKeyFromVars(r, "id")
 		if id == "" {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:delete:notFound", errors.New("Could not find id in the request").Error()))
 			return

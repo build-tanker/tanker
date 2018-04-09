@@ -50,10 +50,10 @@ func (m *MockDatastore) ViewAll() ([]Shipper, error) {
 
 }
 
-func newTestService() service {
+func newTestService() Service {
 	conf := config.New([]string{".", "..", "../.."})
 	ds := NewMockDatastore()
-	return service{cnf: conf, datastore: ds}
+	return Service{cnf: conf, datastore: ds}
 }
 
 func TestServiceAddShippers(t *testing.T) {
