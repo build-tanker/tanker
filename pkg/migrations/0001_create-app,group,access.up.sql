@@ -20,11 +20,11 @@ CREATE TABLE app (
 
 CREATE TABLE access (
   id UUID NOT NULL PRIMARY KEY,
-  person UUID NOT NULL REFERENCES person(id),
+  person UUID NOT NULL,
   app_group UUID REFERENCES app_group(id),
   app UUID REFERENCES app(id),
   access_level VARCHAR(16) DEFAULT 'normal',
-  access_given_by UUID REFERENCES person(id),
+  access_given_by UUID,
   deleted BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
@@ -32,7 +32,7 @@ CREATE TABLE access (
 
 CREATE TABLE shipper (
   id UUID NOT NULL PRIMARY KEY,
-  app_group UUID,
+  app_group UUID REFERENCES app_group(id),
   expiry TIMESTAMP,
   deleted BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT NOW(),

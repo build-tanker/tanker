@@ -9,7 +9,7 @@ services:
       - ./external/pgdata:/pgdata
     # Export this on the usual port
     ports:
-      - "5432:5432"
+      - "5436:5432"
     # These define the db name, user and password
     environment:
       - POSTGRES_USER=tanker

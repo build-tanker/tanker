@@ -1,5 +1,5 @@
-DROP TABLE app_group;
-DROP TABLE app;
 DROP TABLE access;
-DROP TABLE shipper;
+DROP TABLE app;
 DROP TABLE build;
+DROP TABLE shipper;
+DROP TABLE app_group;
