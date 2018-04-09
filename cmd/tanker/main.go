@@ -1,25 +1,22 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/urfave/cli"
 
-	"github.com/build-tanker/tanker/pkg/appcontext"
-	"github.com/build-tanker/tanker/pkg/config"
-	"github.com/build-tanker/tanker/pkg/logger"
-	"github.com/build-tanker/tanker/pkg/postgres"
-	"github.com/build-tanker/tanker/pkg/server"
+	"github.com/build-tanker/tanker/pkg/common/config"
+	"github.com/build-tanker/tanker/pkg/common/postgres"
+	"github.com/build-tanker/tanker/pkg/common/server"
 )
 
 func main() {
-	config := config.NewConfig([]string{".", "..", "../.."})
-	logger := logger.NewLogger(config, os.Stdout)
-	ctx := appcontext.NewAppContext(config, logger)
-	db := postgres.NewPostgres(logger, config.Database().ConnectionURL(), config.Database().MaxPoolSize())
-	server := server.NewServer(ctx, db)
+	cnf := config.New([]string{".", "..", "../.."})
+	db := postgres.New(cnf.ConnectionString(), cnf.MaxPoolSize())
+	server := server.New(cnf, db)
 
-	logger.Infoln("Starting tanker")
+	fmt.Println("Starting tanker")
 
 	app := cli.NewApp()
 	app.Name = "tanker"
@@ -38,14 +35,14 @@ func main() {
 			Name:  "migrate",
 			Usage: "run database migrations",
 			Action: func(c *cli.Context) error {
-				return postgres.RunDatabaseMigrations(ctx)
+				return postgres.RunDatabaseMigrations(cnf)
 			},
 		},
 		{
 			Name:  "rollback",
 			Usage: "rollback the latest database migration",
 			Action: func(c *cli.Context) error {
-				return postgres.RollbackDatabaseMigration(ctx)
+				return postgres.RollbackDatabaseMigration(cnf)
 			},
 		},
 	}
