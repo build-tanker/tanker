@@ -1,7 +1,9 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"strconv"
 
@@ -12,13 +14,13 @@ import (
 // Config - structure to hold the configuration for tanker
 type Config struct {
 	server struct {
-		port      string
-		host      string
-		fileStore string
+		port string
+		host string
 	}
 	gcs struct {
-		JSONConfig string
-		bucket     string
+		JSONConfig  string
+		bucket      string
+		credentials googleCredentials
 	}
 	database struct {
 		name        string
@@ -28,6 +30,19 @@ type Config struct {
 		port        int
 		maxPoolSize int
 	}
+}
+
+type googleCredentials struct {
+	Type                    string `json:"type"`
+	ProjectID               string `json:"project_id"`
+	PrivateKeyID            string `json:"private_key_id"`
+	PrivateKey              string `json:"private_key"`
+	ClientEmail             string `json:"client_email"`
+	ClientID                string `json:"client_id"`
+	AuthURI                 string `json:"auth_uri"`
+	TokenURI                string `json:"token_uri"`
+	AuthProviderX509CertURL string `json:"auth_provider_x509_cert_url"`
+	ClientX509CertURL       string `json:"client_x509_cert_url"`
 }
 
 // New creates a new configuration
@@ -93,11 +108,6 @@ func (c *Config) MaxPoolSize() int {
 	return c.database.maxPoolSize
 }
 
-// FileStore - get the filestore being used in the app
-func (c *Config) FileStore() string {
-	return c.server.fileStore
-}
-
 // GCSJSONConfig - get the google cloud json config path
 func (c *Config) GCSJSONConfig() string {
 	return c.gcs.JSONConfig
@@ -106,6 +116,11 @@ func (c *Config) GCSJSONConfig() string {
 // GCSBucket - get the google cloud bucket
 func (c *Config) GCSBucket() string {
 	return c.gcs.bucket
+}
+
+// GCSCredentials - get the google credentials
+func (c *Config) GCSCredentials() googleCredentials {
+	return c.gcs.credentials
 }
 
 func (c *Config) mustGetString(key string) string {
@@ -144,10 +159,10 @@ func (c *Config) getInt(key string, defaultValue int) int {
 func (c *Config) readLatestConfig() {
 	c.server.host = c.getString("SERVER_HOST", "http://localhost")
 	c.server.port = c.getString("SERVER_PORT", "4000")
-	c.server.fileStore = c.getString("SERVER_FILESTORE", "googlecloud")
 
 	c.gcs.JSONConfig = c.mustGetString("GCS_JSON_CONFIG")
 	c.gcs.bucket = c.mustGetString("GCS_BUCKET")
+	c.readGoogleConfig()
 
 	c.database.host = c.mustGetString("DB_HOST")
 	c.database.port = c.mustGetInt("DB_PORT")
@@ -155,4 +170,15 @@ func (c *Config) readLatestConfig() {
 	c.database.user = c.mustGetString("DB_USER")
 	c.database.password = c.mustGetString("DB_PASSWORD")
 	c.database.maxPoolSize = c.getInt("DB_MAX_POOL_SIZE", 5)
+}
+
+func (c *Config) readGoogleConfig() {
+	data, err := ioutil.ReadFile(c.gcs.JSONConfig)
+	if err != nil {
+		log.Fatalf("Could not read the google config file at %s due to %s", c.gcs.JSONConfig, err.Error())
+	}
+	err = json.Unmarshal(data, &c.gcs.credentials)
+	if err != nil {
+		log.Fatalf("Could not unmarshal gcs json, %s", err.Error())
+	}
 }

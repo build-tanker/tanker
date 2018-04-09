@@ -1,45 +1,24 @@
 package builds
 
 import (
-	"log"
-
 	"github.com/build-tanker/tanker/pkg/common/config"
-	"github.com/build-tanker/tanker/pkg/filestore"
+	"github.com/build-tanker/tanker/pkg/fileserver"
 	"github.com/jmoiron/sqlx"
 )
 
 // Service for builds
 type Service struct {
-	cnf   *config.Config
-	fs    filestore.FileStore
-	store store
+	cnf        *config.Config
+	store      store
+	fileServer *fileserver.FileServer
 }
 
 // New - create a new service for builds
-func New(cnf *config.Config, db *sqlx.DB) *Service {
-	s := &Service{
-		cnf:   cnf,
-		store: newStore(cnf, db),
-	}
-	s.init()
-	return s
-}
-
-func (s *Service) init() {
-	fileStore := s.cnf.FileStore()
-	switch fileStore {
-	case "googlecloud":
-		s.fs = filestore.NewGoogleCloudStorageFileStore(s.cnf)
-		err := s.fs.Setup()
-		if err != nil {
-			log.Fatalln("Could not setup GoogleCloudStorage", err.Error())
-		}
-	case "s3":
-		log.Fatalln("This FileStore is not supported:", fileStore)
-	case "local":
-		log.Fatalln("This FileStore is not supported:", fileStore)
-	default:
-		log.Fatalln("This FileStore is not supported:", fileStore)
+func New(cnf *config.Config, db *sqlx.DB, fileServer *fileserver.FileServer) *Service {
+	return &Service{
+		cnf:        cnf,
+		fileServer: fileServer,
+		store:      newStore(cnf, db),
 	}
 }
 
@@ -47,7 +26,7 @@ func (s *Service) init() {
 func (s *Service) Add(fileName, shipper, bundle, platform, extension string) (string, error) {
 	// Does two things
 	// Get a url from the google cloud package and return it
-	url, err := s.fs.GetWriteURL()
+	url, err := s.fileServer.GetUploadURL()
 	if err != nil {
 		return "", err
 	}

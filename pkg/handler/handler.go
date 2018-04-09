@@ -8,6 +8,7 @@ import (
 
 	"github.com/build-tanker/tanker/pkg/builds"
 	"github.com/build-tanker/tanker/pkg/common/config"
+	"github.com/build-tanker/tanker/pkg/fileserver"
 	"github.com/build-tanker/tanker/pkg/shippers"
 )
 
@@ -23,8 +24,11 @@ type httpHandler func(w http.ResponseWriter, r *http.Request)
 
 // New creates a new handler
 func New(conf *config.Config, db *sqlx.DB) *Handler {
+	// Crete FileServer
+	fileServer := fileserver.New(conf, fileserver.NewGoogleCloudStorage())
+
 	// Create services
-	buildService := builds.New(conf, db)
+	buildService := builds.New(conf, db, fileServer)
 	shipperService := shippers.New(conf, db)
 
 	// Finally, create handlers

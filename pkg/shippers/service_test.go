@@ -8,6 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var conf *config.Config
+
 type MockDatastore struct{}
 
 func NewMockDatastore() Datastore {
@@ -50,8 +52,14 @@ func (m *MockDatastore) ViewAll() ([]Shipper, error) {
 
 }
 
+func initConfig() {
+	if conf == nil {
+		conf = config.New([]string{".", "..", "../.."})
+	}
+}
+
 func newTestService() Service {
-	conf := config.New([]string{".", "..", "../.."})
+	initConfig()
 	ds := NewMockDatastore()
 	return Service{cnf: conf, datastore: ds}
 }
