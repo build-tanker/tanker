@@ -8,12 +8,14 @@ import (
 
 	"github.com/build-tanker/tanker/pkg/builds"
 	"github.com/build-tanker/tanker/pkg/common/config"
+	"github.com/build-tanker/tanker/pkg/shippers"
 )
 
 // Handler exposes all handlers
 type Handler struct {
-	health *healthHandler
-	builds *buildHandler
+	health  *healthHandler
+	build   *buildHandler
+	shipper *shipperHandler
 }
 
 // HTTPHandler is the type which can handle a URL
@@ -21,15 +23,16 @@ type httpHandler func(w http.ResponseWriter, r *http.Request)
 
 // New creates a new handler
 func New(conf *config.Config, db *sqlx.DB) *Handler {
-
 	// Create services
 	buildService := builds.New(conf, db)
+	shipperService := shippers.New(conf, db)
 
 	// Finally, create handlers
 	health := newHealthHandler()
-	builds := newBuildHandler(buildService)
+	build := newBuildHandler(buildService)
+	shipper := newShipperHandler(shipperService)
 
-	return &Handler{health, builds}
+	return &Handler{health, build, shipper}
 }
 
 // Route pipes requests to the correct handlers
@@ -38,7 +41,12 @@ func (h *Handler) Route() http.Handler {
 
 	router.HandleFunc("/ping", h.health.ping()).Methods(http.MethodGet)
 
-	router.HandleFunc("/v1/builds/new", h.builds.Add()).Methods(http.MethodGet)
+	router.HandleFunc("/v1/builds", h.build.Add()).Methods(http.MethodPost)
+
+	router.HandleFunc("/v1/shippers", h.shipper.Add()).Methods(http.MethodPost)
+	router.HandleFunc("/v1/shippers", h.shipper.ViewAll()).Methods(http.MethodGet)
+	router.HandleFunc("/v1/shippers/{id}", h.shipper.View()).Methods(http.MethodGet)
+	router.HandleFunc("/v1/shippers/{id}", h.shipper.View()).Methods(http.MethodDelete)
 
 	return router
 
