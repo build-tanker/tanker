@@ -42,7 +42,7 @@ func NewDatastore(cnf *config.Config, db *sqlx.DB) Datastore {
 
 func (s *datastore) Add(appGroup string, expiry int) (string, error) {
 	id := s.generateUUID()
-	rows, err := s.db.Queryx("INSERT INTO shippers (id, app_group, expiry) VALUES ($1, $2, $3) RETURNING id", id, appGroup, expiry)
+	rows, err := s.db.Queryx("INSERT INTO shipper (id, app_group, expiry) VALUES ($1, $2, $3) RETURNING id", id, appGroup, expiry)
 	if err != nil {
 		return "", err
 	}
@@ -64,7 +64,7 @@ func (s *datastore) generateUUID() string {
 }
 
 func (s *datastore) Delete(id string) error {
-	_, err := s.db.Exec("DELETE FROM shippers WHERE id=$1", id)
+	_, err := s.db.Exec("DELETE FROM shipper WHERE id=$1", id)
 	if err != nil {
 		return err
 	}
@@ -72,7 +72,7 @@ func (s *datastore) Delete(id string) error {
 }
 
 func (s *datastore) View(id string) (Shipper, error) {
-	rows, err := s.db.Queryx("SELECT * FROM shippers WHERE id=$1", id)
+	rows, err := s.db.Queryx("SELECT * FROM shipper WHERE id=$1", id)
 	if err != nil {
 		return Shipper{}, err
 	}
@@ -90,7 +90,7 @@ func (s *datastore) View(id string) (Shipper, error) {
 func (s *datastore) ViewAll() ([]Shipper, error) {
 	shippers := []Shipper{}
 
-	rows, err := s.db.Queryx("SELECT * FROM shippers LIMIT 100 OFFSET 0")
+	rows, err := s.db.Queryx("SELECT * FROM shipper LIMIT 100 OFFSET 0")
 	if err != nil {
 		return shippers, err
 	}
