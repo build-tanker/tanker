@@ -8,29 +8,24 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// Service - handles business logic for builds
-type Service interface {
-	Add(fileName, shipper, bundle, platform, extension string) (string, error)
+// Service for builds
+type Service struct {
+	cnf   *config.Config
+	fs    filestore.FileStore
+	store store
 }
 
-type service struct {
-	cnf       *config.Config
-	fs        filestore.FileStore
-	datastore Datastore
-}
-
-// NewService - create a new service for builds
-func NewService(cnf *config.Config, db *sqlx.DB) Service {
-	datastore := NewDatastore(cnf, db)
-	s := &service{
-		cnf:       cnf,
-		datastore: datastore,
+// New - create a new service for builds
+func New(cnf *config.Config, db *sqlx.DB) *Service {
+	s := &Service{
+		cnf:   cnf,
+		store: newStore(cnf, db),
 	}
 	s.init()
 	return s
 }
 
-func (s *service) init() {
+func (s *Service) init() {
 	fileStore := s.cnf.FileStore()
 	switch fileStore {
 	case "googlecloud":
@@ -48,15 +43,17 @@ func (s *service) init() {
 	}
 }
 
-func (s *service) Add(fileName, shipper, bundle, platform, extension string) (string, error) {
+// Add a new build
+func (s *Service) Add(fileName, shipper, bundle, platform, extension string) (string, error) {
 	// Does two things
 	// Get a url from the google cloud package and return it
 	url, err := s.fs.GetWriteURL()
 	if err != nil {
 		return "", err
 	}
+
 	// Create an entry in the database
-	_, err = s.datastore.Add(fileName, shipper, bundle, platform, extension)
+	_, err = s.store.add(fileName, shipper, bundle, platform, extension)
 	if err != nil {
 		return "", err
 	}

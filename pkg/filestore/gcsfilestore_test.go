@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/build-tanker/disk"
+	"github.com/build-tanker/tanker/pkg/common/config"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -41,11 +42,11 @@ func (m MockFS) DeleteFile(path string) error {
 }
 
 func newTestGoogleCloudStorageFileStore() *googleCloudStorageFileStore {
-	ctx := NewTestContext()
+	conf := config.New([]string{".", "..", "../.."})
 	dd := NewMockFS()
 	gcs := NewMockGoogleCloudStorage()
 	return &googleCloudStorageFileStore{
-		ctx:   ctx,
+		cnf:   conf,
 		creds: &googleCredentials{},
 		dd:    dd,
 		gcs:   gcs,

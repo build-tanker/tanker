@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/build-tanker/tanker/pkg/common/config"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -50,12 +51,12 @@ func (m *MockDatastore) ViewAll() ([]Shipper, error) {
 }
 
 func newTestService() service {
-	ctx := NewTestContext()
+	conf := config.New([]string{".", "..", "../.."})
 	ds := NewMockDatastore()
-	return service{ctx: ctx, datastore: ds}
+	return service{cnf: conf, datastore: ds}
 }
 
-func TestServiceAdd(t *testing.T) {
+func TestServiceAddShippers(t *testing.T) {
 	ss := newTestService()
 	id, err := ss.Add("testAppGroup", 10)
 	assert.Equal(t, "testID", id)

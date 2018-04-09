@@ -6,6 +6,7 @@ import (
 
 	"github.com/build-tanker/tanker/pkg/common/config"
 	"github.com/jmoiron/sqlx"
+	uuid "github.com/satori/go.uuid"
 )
 
 // Build - data structure for builds
@@ -23,25 +24,25 @@ type Build struct {
 }
 
 // Datastore - datastore for builds
-type Datastore interface {
-	Add(fileName, shipper, bundleID, platform, extension string) (string, error)
+type store interface {
+	add(fileName, shipper, bundleID, platform, extension string) (string, error)
 }
 
-type datastore struct {
+type persistentStore struct {
 	cnf *config.Config
 	db  *sqlx.DB
 }
 
 // NewDatastore - create a new datastore for builds
-func NewDatastore(cnf *config.Config, db *sqlx.DB) Datastore {
-	return &datastore{
+func newStore(cnf *config.Config, db *sqlx.DB) store {
+	return &persistentStore{
 		cnf: cnf,
 		db:  db,
 	}
 }
 
-func (d *datastore) Add(fileName, shipper, bundleID, platform, extension string) (string, error) {
-	rows, err := d.db.Queryx("INSERT INTO builds (file_name, shipper, bundle_id, platform, extension) VALUES($1, $2, $3, $4, $5) RETURNING id", fileName, shipper, bundleID, platform, extension)
+func (s *persistentStore) add(fileName, shipper, bundleID, platform, extension string) (string, error) {
+	rows, err := s.db.Queryx("INSERT INTO builds (file_name, shipper, bundle_id, platform, extension) VALUES($1, $2, $3, $4, $5) RETURNING id", fileName, shipper, bundleID, platform, extension)
 	if err != nil {
 		return "", err
 	}
@@ -56,4 +57,8 @@ func (d *datastore) Add(fileName, shipper, bundleID, platform, extension string)
 	}
 
 	return "", errors.New("No error in inserting, still could not find a ID")
+}
+
+func (s *persistentStore) generateUUID() string {
+	return uuid.NewV4().String()
 }

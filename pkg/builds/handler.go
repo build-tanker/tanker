@@ -20,7 +20,7 @@ type Handler interface {
 
 type handler struct {
 	cnf     *config.Config
-	service Service
+	service *Service
 }
 
 // BuildAddResponse - create a response for adding a build
@@ -30,7 +30,7 @@ type BuildAddResponse struct {
 
 // NewHandler - creates a new handler for builds
 func NewHandler(cnf *config.Config, db *sqlx.DB) Handler {
-	b := NewService(cnf, db)
+	b := New(cnf, db)
 	return &handler{
 		cnf:     cnf,
 		service: b,

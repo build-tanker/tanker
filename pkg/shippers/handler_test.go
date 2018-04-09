@@ -10,16 +10,16 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/build-tanker/tanker/pkg/appcontext"
+	"github.com/build-tanker/tanker/pkg/common/config"
 )
 
 type MockService struct {
-	ctx *appcontext.AppContext
+	conf *config.Config
 }
 
-func NewMockService(ctx *appcontext.AppContext) *MockService {
+func NewMockService(conf *config.Config) *MockService {
 	return &MockService{
-		ctx: ctx,
+		conf: conf,
 	}
 }
 
@@ -58,9 +58,9 @@ func (m *MockService) ViewAll() ([]Shipper, error) {
 }
 
 func newTestHandler() *handler {
-	ctx := NewTestContext()
+	conf := config.New([]string{".", "..", "../.."})
 	return &handler{
-		service: NewMockService(ctx),
+		service: NewMockService(conf),
 	}
 }
 
