@@ -93,14 +93,17 @@ func (c *Config) MaxPoolSize() int {
 	return c.database.maxPoolSize
 }
 
+// FileStore - get the filestore being used in the app
 func (c *Config) FileStore() string {
 	return c.server.fileStore
 }
 
+// GCSJSONConfig - get the google cloud json config path
 func (c *Config) GCSJSONConfig() string {
 	return c.gcs.JSONConfig
 }
 
+// GCSBucket - get the google cloud bucket
 func (c *Config) GCSBucket() string {
 	return c.gcs.bucket
 }
