@@ -20,7 +20,7 @@ type Config struct {
 	gcs struct {
 		JSONConfig  string
 		bucket      string
-		credentials googleCredentials
+		credentials GoogleCredentials
 	}
 	database struct {
 		name        string
@@ -32,7 +32,7 @@ type Config struct {
 	}
 }
 
-type googleCredentials struct {
+type GoogleCredentials struct {
 	Type                    string `json:"type"`
 	ProjectID               string `json:"project_id"`
 	PrivateKeyID            string `json:"private_key_id"`
@@ -119,7 +119,7 @@ func (c *Config) GCSBucket() string {
 }
 
 // GCSCredentials - get the google credentials
-func (c *Config) GCSCredentials() googleCredentials {
+func (c *Config) GCSCredentials() GoogleCredentials {
 	return c.gcs.credentials
 }
 
