@@ -64,7 +64,7 @@ func (s *datastore) generateUUID() string {
 }
 
 func (s *datastore) Delete(id string) error {
-	_, err := s.db.Exec("DELETE FROM shipper WHERE id=$1", id)
+	_, err := s.db.Exec("UPDATE shipper SET deleted='true' WHERE id=$1", id)
 	if err != nil {
 		return err
 	}
