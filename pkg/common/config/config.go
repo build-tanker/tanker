@@ -32,6 +32,7 @@ type Config struct {
 	}
 }
 
+// GoogleCredentials contains the data to login to google cloud storage
 type GoogleCredentials struct {
 	Type                    string `json:"type"`
 	ProjectID               string `json:"project_id"`
