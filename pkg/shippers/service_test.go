@@ -2,54 +2,25 @@ package shippers
 
 import (
 	"testing"
-	"time"
 
 	"github.com/build-tanker/tanker/pkg/common/config"
-	"github.com/stretchr/testify/assert"
+	"github.com/build-tanker/tanker/pkg/common/postgres"
+	"github.com/jmoiron/sqlx"
 )
 
 var conf *config.Config
+var sqlDB *sqlx.DB
 
-type MockDatastore struct{}
-
-func NewMockDatastore() Datastore {
-	return &MockDatastore{}
+func initDB() {
+	if sqlDB == nil {
+		sqlDB = postgres.New(conf.ConnectionURL(), conf.MaxPoolSize())
+	}
 }
 
-func (m *MockDatastore) Add(appGroup string, expiry int) (string, error) {
-	return "testID", nil
-}
-
-func (m *MockDatastore) Delete(accessKey string) error {
-	return nil
-}
-
-func (m *MockDatastore) View(id string) (Shipper, error) {
-	testTime := time.Date(2018, 1, 31, 1, 1, 1, 1, time.UTC)
-	return Shipper{
-		ID:        "testID",
-		AppGroup:  "testAppGroup",
-		Expiry:    10,
-		Deleted:   false,
-		CreatedAt: testTime,
-		UpdatedAt: testTime,
-	}, nil
-
-}
-
-func (m *MockDatastore) ViewAll() ([]Shipper, error) {
-	testTime := time.Date(2018, 1, 31, 1, 1, 1, 1, time.UTC)
-	return []Shipper{
-		Shipper{
-			ID:        "testID",
-			AppGroup:  "testAppGroup",
-			Expiry:    10,
-			Deleted:   false,
-			CreatedAt: testTime,
-			UpdatedAt: testTime,
-		},
-	}, nil
-
+func closeDB() {
+	if sqlDB != nil {
+		sqlDB.Close()
+	}
 }
 
 func initConfig() {
@@ -58,41 +29,6 @@ func initConfig() {
 	}
 }
 
-func newTestService() Service {
-	initConfig()
-	ds := NewMockDatastore()
-	return Service{cnf: conf, datastore: ds}
-}
+func TestShippers(t *testing.T) {
 
-func TestServiceAddShippers(t *testing.T) {
-	ss := newTestService()
-	id, err := ss.Add("testAppGroup", 10)
-	assert.Equal(t, "testID", id)
-	assert.Nil(t, err)
-}
-
-func TestServiceDelete(t *testing.T) {
-	ss := newTestService()
-	err := ss.Delete("5")
-	assert.Nil(t, err)
-}
-
-func TestServiceView(t *testing.T) {
-	ss := newTestService()
-	shipper, err := ss.View("testID")
-	assert.Nil(t, err)
-	assert.Equal(t, "testID", shipper.ID)
-	assert.Equal(t, "testAppGroup", shipper.AppGroup)
-	assert.Equal(t, 10, shipper.Expiry)
-	assert.Equal(t, false, shipper.Deleted)
-}
-
-func TestServiceViewAll(t *testing.T) {
-	ss := newTestService()
-	shippers, err := ss.ViewAll()
-	assert.Nil(t, err)
-	assert.Equal(t, "testID", shippers[0].ID)
-	assert.Equal(t, "testAppGroup", shippers[0].AppGroup)
-	assert.Equal(t, 10, shippers[0].Expiry)
-	assert.Equal(t, false, shippers[0].Deleted)
 }
