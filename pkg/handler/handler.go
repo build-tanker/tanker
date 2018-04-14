@@ -6,6 +6,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 
+	"github.com/build-tanker/tanker/pkg/access"
+	"github.com/build-tanker/tanker/pkg/appgroups"
+	"github.com/build-tanker/tanker/pkg/apps"
 	"github.com/build-tanker/tanker/pkg/builds"
 	"github.com/build-tanker/tanker/pkg/common/config"
 	"github.com/build-tanker/tanker/pkg/fileserver"
@@ -14,9 +17,11 @@ import (
 
 // Handler exposes all handlers
 type Handler struct {
-	health  *healthHandler
-	build   *buildHandler
-	shipper *shipperHandler
+	health   *healthHandler
+	build    *buildHandler
+	shipper  *shipperHandler
+	app      *appHandler
+	appGroup *appGroupHandler
 }
 
 // HTTPHandler is the type which can handle a URL
@@ -30,13 +35,18 @@ func New(conf *config.Config, db *sqlx.DB) *Handler {
 	// Create services
 	buildService := builds.New(conf, db, fileServer)
 	shipperService := shippers.New(conf, db)
+	accessService := access.New(conf, db)
+	appService := apps.New(conf, db, accessService)
+	appGroupService := appgroups.New(conf, db, accessService)
 
 	// Finally, create handlers
 	health := newHealthHandler()
 	build := newBuildHandler(buildService)
 	shipper := newShipperHandler(shipperService)
+	app := newAppHandler(appService)
+	appGroup := newAppGroupHandler(appGroupService)
 
-	return &Handler{health, build, shipper}
+	return &Handler{health, build, shipper, app, appGroup}
 }
 
 // Route pipes requests to the correct handlers

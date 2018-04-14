@@ -1,4 +1,4 @@
-package appgroup
+package appgroups
 
 import (
 	"errors"

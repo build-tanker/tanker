@@ -1,6 +1,7 @@
 package apps
 
 import (
+	"github.com/build-tanker/tanker/pkg/access"
 	"github.com/build-tanker/tanker/pkg/common/config"
 	"github.com/jmoiron/sqlx"
 )
@@ -9,12 +10,13 @@ import (
 type Service struct {
 	cnf       *config.Config
 	datastore Datastore
+	access    *access.Service
 }
 
 // New - initialise a new apps service
-func New(cnf *config.Config, db *sqlx.DB) *Service {
+func New(cnf *config.Config, db *sqlx.DB, access *access.Service) *Service {
 	datastore := NewDatastore(cnf, db)
-	return &Service{cnf, datastore}
+	return &Service{cnf, datastore, access}
 }
 
 // Add a new app
