@@ -20,8 +20,8 @@ func New(cnf *config.Config, db *sqlx.DB, access *access.Service) *Service {
 }
 
 // Add a new app
-func (s *Service) Add(appGroup, name, bundleID, platform string) (string, error) {
-	return s.datastore.Add(appGroup, name, bundleID, platform)
+func (s *Service) Add(org, name, bundleID, platform string) (string, error) {
+	return s.datastore.Add(org, name, bundleID, platform)
 }
 
 // Delete an app

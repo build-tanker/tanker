@@ -3,19 +3,19 @@ package handler
 import (
 	"net/http"
 
-	"github.com/build-tanker/tanker/pkg/appgroups"
 	"github.com/build-tanker/tanker/pkg/common/responses"
+	"github.com/build-tanker/tanker/pkg/orgs"
 )
 
-type appGroupHandler struct {
-	service *appgroups.Service
+type orgHandler struct {
+	service *orgs.Service
 }
 
-func newAppGroupHandler(service *appgroups.Service) *appGroupHandler {
-	return &appGroupHandler{service}
+func newOrgHandler(service *orgs.Service) *orgHandler {
+	return &orgHandler{service}
 }
 
-func (a *appGroupHandler) Add() httpHandler {
+func (a *orgHandler) Add() httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		name := parseKeyFromQuery(r, "name")
@@ -23,7 +23,7 @@ func (a *appGroupHandler) Add() httpHandler {
 
 		id, err := a.service.Add(name, imageURL)
 		if err != nil {
-			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("appGroup:add:error", err.Error()))
+			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("org:add:error", err.Error()))
 			return
 		}
 

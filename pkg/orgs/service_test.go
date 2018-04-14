@@ -1,4 +1,4 @@
-package appgroups_test
+package orgs_test
 
 import (
 	"testing"
@@ -29,6 +29,6 @@ func initConfig() {
 	}
 }
 
-func TestAppGroups(t *testing.T) {
+func TestOrgs(t *testing.T) {
 
 }

@@ -12,7 +12,7 @@ import (
 // Shipper - structure to hold a shipper
 type Shipper struct {
 	ID        string    `db:"id" json:"id,omitempty"`
-	AppGroup  string    `db:"app_group" json:"app_group,omitempty"`
+	Org       string    `db:"org" json:"org,omitempty"`
 	Expiry    int       `db:"expiry" json:"expiry,omitempty"`
 	Deleted   bool      `db:"deleted" json:"deleted,omitempty"`
 	CreatedAt time.Time `db:"created_at" json:"created_at,omitempty"`
@@ -21,7 +21,7 @@ type Shipper struct {
 
 // Datastore - the datastore for shippers
 type Datastore interface {
-	Add(appGroup string, expiry int) (string, error)
+	Add(org string, expiry int) (string, error)
 	Delete(id string) error
 	View(id string) (Shipper, error)
 	ViewAll() ([]Shipper, error)
@@ -40,9 +40,9 @@ func NewDatastore(cnf *config.Config, db *sqlx.DB) Datastore {
 	}
 }
 
-func (s *datastore) Add(appGroup string, expiry int) (string, error) {
+func (s *datastore) Add(org string, expiry int) (string, error) {
 	id := s.generateUUID()
-	rows, err := s.db.Queryx("INSERT INTO shipper (id, app_group, expiry) VALUES ($1, $2, $3) RETURNING id", id, appGroup, expiry)
+	rows, err := s.db.Queryx("INSERT INTO shipper (id, org, expiry) VALUES ($1, $2, $3) RETURNING id", id, org, expiry)
 	if err != nil {
 		return "", err
 	}

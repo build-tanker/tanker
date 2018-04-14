@@ -1,4 +1,4 @@
-package appgroups
+package orgs
 
 import (
 	"errors"
@@ -9,8 +9,8 @@ import (
 	"github.com/satori/go.uuid"
 )
 
-// AppGroup - structure to hold an appGroup
-type AppGroup struct {
+// Org - structure to hold an org
+type Org struct {
 	ID        string    `db:"id" json:"id,omitempty"`
 	Name      string    `db:"name" json:"name,omitempty"`
 	ImageURL  string    `db:"image_url" json:"image_url,omitempty"`
@@ -19,12 +19,12 @@ type AppGroup struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at,omitempty"`
 }
 
-// Datastore - the datastore for appGroups
+// Datastore - the datastore for orgs
 type Datastore interface {
 	Add(name, imageURL string) (string, error)
 	Delete(id string) error
-	View(id string) (AppGroup, error)
-	ViewAll() ([]AppGroup, error)
+	View(id string) (Org, error)
+	ViewAll() ([]Org, error)
 }
 
 type datastore struct {
@@ -32,7 +32,7 @@ type datastore struct {
 	db   *sqlx.DB
 }
 
-// NewDatastore - create a new datastore for appGroups
+// NewDatastore - create a new datastore for orgs
 func NewDatastore(cnf *config.Config, db *sqlx.DB) Datastore {
 	return &datastore{
 		conf: cnf,
@@ -40,17 +40,17 @@ func NewDatastore(cnf *config.Config, db *sqlx.DB) Datastore {
 	}
 }
 
-// Add a new appGroup
+// Add a new org
 func (s *datastore) Add(name, imageURL string) (string, error) {
 	id := s.generateUUID()
-	rows, err := s.db.Queryx("INSERT INTO appGroup (id, name, image_url) VALUES ($1, $2, $3) RETURNING id", id, name, imageURL)
+	rows, err := s.db.Queryx("INSERT INTO org (id, name, image_url) VALUES ($1, $2, $3) RETURNING id", id, name, imageURL)
 	if err != nil {
 		return "", err
 	}
 
 	for rows.Next() {
-		var appGroup AppGroup
-		err = rows.StructScan(&appGroup)
+		var org Org
+		err = rows.StructScan(&org)
 		if err != nil {
 			return "", err
 		}
@@ -65,44 +65,44 @@ func (s *datastore) generateUUID() string {
 }
 
 func (s *datastore) Delete(id string) error {
-	_, err := s.db.Exec("UPDATE appGroup SET deleted='true' WHERE id=$1", id)
+	_, err := s.db.Exec("UPDATE org SET deleted='true' WHERE id=$1", id)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *datastore) View(id string) (AppGroup, error) {
-	rows, err := s.db.Queryx("SELECT * FROM appGroup WHERE id=$1", id)
+func (s *datastore) View(id string) (Org, error) {
+	rows, err := s.db.Queryx("SELECT * FROM org WHERE id=$1", id)
 	if err != nil {
-		return AppGroup{}, err
+		return Org{}, err
 	}
 
-	var appGroup AppGroup
+	var org Org
 	for rows.Next() {
-		err = rows.StructScan(&appGroup)
+		err = rows.StructScan(&org)
 		if err != nil {
-			return AppGroup{}, err
+			return Org{}, err
 		}
 	}
-	return appGroup, nil
+	return org, nil
 }
 
-func (s *datastore) ViewAll() ([]AppGroup, error) {
-	appGroups := []AppGroup{}
+func (s *datastore) ViewAll() ([]Org, error) {
+	orgs := []Org{}
 
-	rows, err := s.db.Queryx("SELECT * FROM appGroup LIMIT 100 OFFSET 0")
+	rows, err := s.db.Queryx("SELECT * FROM org LIMIT 100 OFFSET 0")
 	if err != nil {
-		return appGroups, err
+		return orgs, err
 	}
 
 	for rows.Next() {
-		var appGroup AppGroup
-		err = rows.StructScan(&appGroup)
+		var org Org
+		err = rows.StructScan(&org)
 		if err != nil {
-			return appGroups, err
+			return orgs, err
 		}
-		appGroups = append(appGroups, appGroup)
+		orgs = append(orgs, org)
 	}
-	return appGroups, nil
+	return orgs, nil
 }

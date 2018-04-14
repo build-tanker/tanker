@@ -13,7 +13,7 @@ import (
 type Access struct {
 	ID            string    `db:"id" json:"id,omitempty"`
 	Person        string    `db:"person" json:"person,omitempty"`
-	AppGroup      string    `db:"app_group" json:"app_group,omitempty"`
+	Org           string    `db:"org" json:"org,omitempty"`
 	App           string    `db:"app" json:"app,omitempty"`
 	AccessLevel   string    `db:"access_level" json:"access_level,omitempty"`
 	AccessGivenBy string    `db:"access_given_by" json:"access_given_by,omitempty"`
@@ -24,7 +24,7 @@ type Access struct {
 
 // Datastore - the datastore for access
 type Datastore interface {
-	Add(person, appGroup, app, accessLevel, accessGivenBy string) (string, error)
+	Add(person, org, app, accessLevel, accessGivenBy string) (string, error)
 	Delete(id string) error
 	View(id string) (Access, error)
 }
@@ -43,9 +43,9 @@ func NewDatastore(cnf *config.Config, db *sqlx.DB) Datastore {
 }
 
 // Add a new access level
-func (s *datastore) Add(person, appGroup, app, accessLevel, accessGivenBy string) (string, error) {
+func (s *datastore) Add(person, org, app, accessLevel, accessGivenBy string) (string, error) {
 	id := s.generateUUID()
-	rows, err := s.db.Queryx("INSERT INTO access (id, person, app_group, app, access_level, access_given_by ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", id, person, appGroup, app, accessLevel, accessGivenBy)
+	rows, err := s.db.Queryx("INSERT INTO access (id, person, org, app, access_level, access_given_by ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", id, person, org, app, accessLevel, accessGivenBy)
 	if err != nil {
 		return "", err
 	}

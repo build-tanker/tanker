@@ -18,8 +18,8 @@ func New(cnf *config.Config, db *sqlx.DB) *Service {
 }
 
 // Add a new shipper
-func (s *Service) Add(appGroup string, expiry int) (string, error) {
-	return s.datastore.Add(appGroup, expiry)
+func (s *Service) Add(org string, expiry int) (string, error) {
+	return s.datastore.Add(org, expiry)
 }
 
 // Delete a shipper

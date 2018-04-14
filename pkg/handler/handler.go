@@ -7,21 +7,21 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/build-tanker/tanker/pkg/access"
-	"github.com/build-tanker/tanker/pkg/appgroups"
 	"github.com/build-tanker/tanker/pkg/apps"
 	"github.com/build-tanker/tanker/pkg/builds"
 	"github.com/build-tanker/tanker/pkg/common/config"
 	"github.com/build-tanker/tanker/pkg/fileserver"
+	"github.com/build-tanker/tanker/pkg/orgs"
 	"github.com/build-tanker/tanker/pkg/shippers"
 )
 
 // Handler exposes all handlers
 type Handler struct {
-	health   *healthHandler
-	build    *buildHandler
-	shipper  *shipperHandler
-	app      *appHandler
-	appGroup *appGroupHandler
+	health  *healthHandler
+	build   *buildHandler
+	shipper *shipperHandler
+	app     *appHandler
+	org     *orgHandler
 }
 
 // HTTPHandler is the type which can handle a URL
@@ -37,16 +37,16 @@ func New(conf *config.Config, db *sqlx.DB) *Handler {
 	shipperService := shippers.New(conf, db)
 	accessService := access.New(conf, db)
 	appService := apps.New(conf, db, accessService)
-	appGroupService := appgroups.New(conf, db, accessService)
+	orgService := orgs.New(conf, db, accessService)
 
 	// Finally, create handlers
 	health := newHealthHandler()
 	build := newBuildHandler(buildService)
 	shipper := newShipperHandler(shipperService)
 	app := newAppHandler(appService)
-	appGroup := newAppGroupHandler(appGroupService)
+	org := newOrgHandler(orgService)
 
-	return &Handler{health, build, shipper, app, appGroup}
+	return &Handler{health, build, shipper, app, org}
 }
 
 // Route pipes requests to the correct handlers
@@ -55,7 +55,7 @@ func (h *Handler) Route() http.Handler {
 
 	router.HandleFunc("/ping", h.health.ping()).Methods(http.MethodGet)
 
-	router.HandleFunc("/v1/appgroup", h.appGroup.Add()).Methods(http.MethodPost)
+	router.HandleFunc("/v1/org", h.org.Add()).Methods(http.MethodPost)
 
 	router.HandleFunc("/v1/builds", h.build.Add()).Methods(http.MethodPost)
 

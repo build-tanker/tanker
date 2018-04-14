@@ -1,4 +1,4 @@
-CREATE TABLE app_group (
+CREATE TABLE org (
   id UUID NOT NULL PRIMARY KEY,
   name VARCHAR(128),
   image_url VARCHAR(512),
@@ -9,7 +9,7 @@ CREATE TABLE app_group (
 
 CREATE TABLE app (
   id UUID NOT NULL PRIMARY KEY,
-  app_group UUID NOT NULL REFERENCES app_group(id),
+  org UUID NOT NULL REFERENCES org(id),
   name VARCHAR(128),
   bundle_id VARCHAR(128),
   platform VARCHAR(128),
@@ -21,7 +21,7 @@ CREATE TABLE app (
 CREATE TABLE access (
   id UUID NOT NULL PRIMARY KEY,
   person UUID NOT NULL,
-  app_group UUID REFERENCES app_group(id),
+  org UUID REFERENCES org(id),
   app UUID REFERENCES app(id),
   access_level VARCHAR(16) DEFAULT 'normal',
   access_given_by UUID,
@@ -32,7 +32,7 @@ CREATE TABLE access (
 
 CREATE TABLE shipper (
   id UUID NOT NULL PRIMARY KEY,
-  app_group UUID REFERENCES app_group(id),
+  org UUID REFERENCES org(id),
   expiry TIMESTAMP,
   deleted BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT NOW(),

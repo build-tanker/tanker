@@ -18,12 +18,12 @@ func newAppHandler(service *apps.Service) *appHandler {
 func (a *appHandler) Add() httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		appGroup := parseKeyFromQuery(r, "app_group")
+		org := parseKeyFromQuery(r, "org")
 		name := parseKeyFromQuery(r, "name")
 		bundleID := parseKeyFromQuery(r, "bundle_id")
 		platform := parseKeyFromQuery(r, "platform")
 
-		id, err := a.service.Add(appGroup, name, bundleID, platform)
+		id, err := a.service.Add(org, name, bundleID, platform)
 		if err != nil {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("app:add:error", err.Error()))
 			return

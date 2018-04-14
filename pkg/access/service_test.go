@@ -41,18 +41,18 @@ func generateUUID() string {
 func setupDB(t *testing.T) {
 	initDB()
 
-	fakeAppGroup := "c1549825-18cc-4506-9813-133a06e9d187"
+	fakeOrg := "c1549825-18cc-4506-9813-133a06e9d187"
 	fakeApp := "123e5612-1303-4754-a324-e5a4f2460467"
 	fakeName := "fakeApp"
 	fakeBundleID := "com.app.me"
 	fakePlatform := "android"
 
-	_, err := sqlDB.Queryx("INSERT INTO app_group (id, name, image_url) VALUES ($1, $2, $3) RETURNING id", fakeAppGroup, fakeName, "")
+	_, err := sqlDB.Queryx("INSERT INTO org (id, name, image_url) VALUES ($1, $2, $3) RETURNING id", fakeOrg, fakeName, "")
 	if err != nil {
-		t.Fatal("Could not insert data into database for appGroup", err.Error())
+		t.Fatal("Could not insert data into database for org", err.Error())
 	}
 
-	_, err = sqlDB.Queryx("INSERT INTO app (id, app_group, name, bundle_id, platform) VALUES ($1, $2, $3, $4, $5)", fakeApp, fakeAppGroup, fakeName, fakeBundleID, fakePlatform)
+	_, err = sqlDB.Queryx("INSERT INTO app (id, org, name, bundle_id, platform) VALUES ($1, $2, $3, $4, $5)", fakeApp, fakeOrg, fakeName, fakeBundleID, fakePlatform)
 	if err != nil {
 		t.Fatal("Could not insert data into database for app", err.Error())
 	}
@@ -63,21 +63,21 @@ func cleanUpDB(t *testing.T) {
 	initDB()
 
 	fakeName := "fakeApp"
-	fakeAppGroup := "c1549825-18cc-4506-9813-133a06e9d187"
+	fakeOrg := "c1549825-18cc-4506-9813-133a06e9d187"
 
-	_, err := sqlDB.Queryx("DELETE FROM access WHERE app_group=$1", fakeAppGroup)
+	_, err := sqlDB.Queryx("DELETE FROM access WHERE org=$1", fakeOrg)
 	if err != nil {
 		t.Fatal("Could not delete data from database for access", err.Error())
 	}
 
 	_, err = sqlDB.Queryx("DELETE FROM app WHERE name=$1", fakeName)
 	if err != nil {
-		t.Fatal("Could not delete data from database for appGroup", err.Error())
+		t.Fatal("Could not delete data from database for org", err.Error())
 	}
 
-	_, err = sqlDB.Queryx("DELETE FROM app_group WHERE name=$1", fakeName)
+	_, err = sqlDB.Queryx("DELETE FROM org WHERE name=$1", fakeName)
 	if err != nil {
-		t.Fatal("Could not delete data from database for appGroup", err.Error())
+		t.Fatal("Could not delete data from database for org", err.Error())
 	}
 
 }
@@ -89,28 +89,28 @@ func TestAccess(t *testing.T) {
 
 	// Create an access
 	person := generateUUID()
-	appGroup := generateUUID()
+	org := generateUUID()
 	app := generateUUID()
 	accessLevel := "admin"
 
-	ac, err := a.Add(person, appGroup, app, accessLevel, person)
+	ac, err := a.Add(person, org, app, accessLevel, person)
 	assert.Contains(t, err.Error(), "violates foreign key constraint")
 
 	cleanUpDB(t)
 	setupDB(t)
 
-	fakeAppGroup := "c1549825-18cc-4506-9813-133a06e9d187"
+	fakeOrg := "c1549825-18cc-4506-9813-133a06e9d187"
 	fakeApp := "123e5612-1303-4754-a324-e5a4f2460467"
 	fakeAccessLevel := "developer"
 
-	ac, err = a.Add(person, fakeAppGroup, fakeApp, fakeAccessLevel, person)
+	ac, err = a.Add(person, fakeOrg, fakeApp, fakeAccessLevel, person)
 	assert.Nil(t, err)
 
 	acView, err := a.View(ac)
 	assert.Nil(t, err)
 	assert.Equal(t, ac, acView.ID)
 	assert.Equal(t, person, acView.Person)
-	assert.Equal(t, fakeAppGroup, acView.AppGroup)
+	assert.Equal(t, fakeOrg, acView.Org)
 	assert.Equal(t, fakeApp, acView.App)
 	assert.Equal(t, fakeAccessLevel, acView.AccessLevel)
 	assert.Equal(t, person, acView.AccessGivenBy)

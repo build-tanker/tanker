@@ -1,4 +1,4 @@
-package appgroups
+package orgs
 
 import (
 	"github.com/build-tanker/tanker/pkg/access"
@@ -6,37 +6,37 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// Service for appGroups
+// Service for orgs
 type Service struct {
 	cnf       *config.Config
 	datastore Datastore
 	access    *access.Service
 }
 
-// New - initialise a new appGroup service
+// New - initialise a new org service
 func New(cnf *config.Config, db *sqlx.DB, access *access.Service) *Service {
 	datastore := NewDatastore(cnf, db)
 	return &Service{cnf, datastore, access}
 }
 
-// Add a new appGroup
+// Add a new org
 func (s *Service) Add(name, imageURL string) (string, error) {
-	// Create an app group
-	// Create access as admin for this app group
+	// Create an app org
+	// Create access as admin for this app org
 	return s.datastore.Add(name, imageURL)
 }
 
-// Delete an appGroup
+// Delete an org
 func (s *Service) Delete(id string) error {
 	return s.datastore.Delete(id)
 }
 
-// View an appGroup
-func (s *Service) View(id string) (AppGroup, error) {
+// View an org
+func (s *Service) View(id string) (Org, error) {
 	return s.datastore.View(id)
 }
 
-// ViewAll appGroups
-func (s *Service) ViewAll() ([]AppGroup, error) {
+// ViewAll orgs
+func (s *Service) ViewAll() ([]Org, error) {
 	return s.datastore.ViewAll()
 }

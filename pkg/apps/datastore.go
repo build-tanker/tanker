@@ -12,7 +12,7 @@ import (
 // App - structure to hold an app
 type App struct {
 	ID        string    `db:"id" json:"id,omitempty"`
-	AppGroup  string    `db:"app_group" json:"app_group,omitempty"`
+	Org       string    `db:"org" json:"org,omitempty"`
 	Name      string    `db:"name" json:"name,omitempty"`
 	BundleID  string    `db:"bundle_id" json:"bundle_id,omitempty"`
 	Platform  string    `db:"platform" json:"platform,omitempty"`
@@ -23,7 +23,7 @@ type App struct {
 
 // Datastore - the datastore for apps
 type Datastore interface {
-	Add(appGroup, name, bundleID, platform string) (string, error)
+	Add(org, name, bundleID, platform string) (string, error)
 	Delete(id string) error
 	View(id string) (App, error)
 	ViewAll() ([]App, error)
@@ -42,10 +42,10 @@ func NewDatastore(cnf *config.Config, db *sqlx.DB) Datastore {
 	}
 }
 
-// Add(appGroup, name, bundleID, platform string) (string, error)
-func (s *datastore) Add(appGroup, name, bundleID, platform string) (string, error) {
+// Add(org, name, bundleID, platform string) (string, error)
+func (s *datastore) Add(org, name, bundleID, platform string) (string, error) {
 	id := s.generateUUID()
-	rows, err := s.db.Queryx("INSERT INTO app (id, app_group, name, bundle_id, platform) VALUES ($1, $2, $3, $4, $5) RETURNING id", id, appGroup, name, bundleID, platform)
+	rows, err := s.db.Queryx("INSERT INTO app (id, org, name, bundle_id, platform) VALUES ($1, $2, $3, $4, $5) RETURNING id", id, org, name, bundleID, platform)
 	if err != nil {
 		return "", err
 	}

@@ -19,7 +19,7 @@ func newShipperHandler(service *shippers.Service) *shipperHandler {
 
 func (s *shipperHandler) Add() httpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		appGroup := parseKeyFromQuery(r, "appGroup")
+		org := parseKeyFromQuery(r, "org")
 		expiry := parseKeyFromQuery(r, "expiry")
 
 		expiryInt, err := strconv.Atoi(expiry)
@@ -27,7 +27,7 @@ func (s *shipperHandler) Add() httpHandler {
 			expiryInt = 0
 		}
 
-		id, err := s.service.Add(appGroup, expiryInt)
+		id, err := s.service.Add(org, expiryInt)
 		if err != nil {
 			responses.WriteJSON(w, http.StatusBadRequest, responses.NewErrorResponse("shipper:add:error", err.Error()))
 			return
