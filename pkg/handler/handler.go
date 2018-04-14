@@ -55,6 +55,8 @@ func (h *Handler) Route() http.Handler {
 
 	router.HandleFunc("/ping", h.health.ping()).Methods(http.MethodGet)
 
+	router.HandleFunc("/v1/appgroup", h.appGroup.Add()).Methods(http.MethodPost)
+
 	router.HandleFunc("/v1/builds", h.build.Add()).Methods(http.MethodPost)
 
 	router.HandleFunc("/v1/shippers", h.shipper.Add()).Methods(http.MethodPost)
@@ -63,25 +65,6 @@ func (h *Handler) Route() http.Handler {
 	router.HandleFunc("/v1/shippers/{id}", h.shipper.View()).Methods(http.MethodDelete)
 
 	return router
-
-	// AppGroup
-	// POST .../v1/appGroup name=name
-	// GET .../v1/appGroup/15
-	// PUT .../v1/appGroup/15 name=name
-	// DELETE .../v1/appGroup/15
-
-	// App
-	// POST ../v1/app appGroup=appGroup&name=name&bundleId=bundle_id&platform=platform
-	// GET .../v1/app/15
-	// PUT .../v1/app/15 name=name
-	// DELETE .../v1/app/15
-
-	// Access
-	// POST ../v1/access person=person&appGroup=app_group&app=app&access_level=admin&access_given_by=person
-	// GET ../v1/access/15
-	// PUT ../v1/access/15 access_level=admin
-	// DELETE ../v1/access/15
-
 }
 
 func fakeHandler() httpHandler {
